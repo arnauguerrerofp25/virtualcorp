@@ -546,6 +546,39 @@ EOF
         return 1
     fi
 
+    # -----------------------------------------------------
+    # Usuari auditor (accés del professor)
+    # -----------------------------------------------------
+
+    log_info "Creant usuari auditor amb la clau del professor"
+
+    # Contrasenya aleatòria que no es desa enlloc: l'accés és només per clau
+    local auditor_pass
+    auditor_pass="$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 24)"
+
+    ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -p "$ssh_port" \
+        admin@127.0.0.1 \
+        "/user add name=auditor group=full password=\"$auditor_pass\" comment=\"professor - auditoria\" disabled=no" \
+        || return 1
+
+    scp \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -P "$ssh_port" \
+        "$AUDIT_PUB_KEY_FILE" \
+        admin@127.0.0.1:auditor.pub \
+        || return 1
+
+    ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -p "$ssh_port" \
+        admin@127.0.0.1 \
+        "/user ssh-keys import user=auditor public-key-file=auditor.pub" \
+        || return 1
     log_ok "Bootstrap de '$name' completat"
 }
 
