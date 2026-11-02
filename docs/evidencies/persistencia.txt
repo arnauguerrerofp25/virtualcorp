@@ -1,0 +1,58 @@
+===== mikrotik0
+                   uptime: 21s                        
+Flags: D - DYNAMIC
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+#   ADDRESS        NETWORK     INTERFACE  VRF 
+0   10.9.0.225/30  10.9.0.224  ether2     main
+1   10.9.0.193/27  10.9.0.192  ether3     main
+2 D 10.0.2.15/24   10.0.2.0    ether1     main
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 255 12ms478us 
+    1 1.1.1.1                                    56 255 12ms851us 
+    sent=2 received=2 packet-loss=0% min-rtt=12ms478us avg-rtt=12ms664us 
+   max-rtt=12ms851us 
+
+===== mikrotik1
+                   uptime: 23s                        
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.226/30  10.9.0.224  ether2     main
+1 10.9.0.229/30  10.9.0.228  ether3     main
+2 10.9.0.1/25    10.9.0.0    ether4     main
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 253 13ms676us 
+    1 1.1.1.1                                    56 253 14ms140us 
+    sent=2 received=2 packet-loss=0% min-rtt=13ms676us avg-rtt=13ms908us 
+   max-rtt=14ms140us 
+
+===== mikrotik2
+                   uptime: 26s                        
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.230/30  10.9.0.228  ether2     main
+1 10.9.0.233/30  10.9.0.232  ether3     main
+2 10.9.1.1/24    10.9.1.0    ether4     main
+3 10.9.2.1/24    10.9.2.0    ether5     main
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 251 10ms28us  
+    1 1.1.1.1                                    56 251 13ms864us 
+    sent=2 received=2 packet-loss=0% min-rtt=10ms28us avg-rtt=11ms946us 
+   max-rtt=13ms864us 
+
+===== mikrotik3
+                   uptime: 29s                        
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.234/30  10.9.0.232  ether2     main
+1 10.9.3.1/25    10.9.3.0    ether3     main
+2 10.9.3.129/25  10.9.3.128  ether4     main
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 249 13ms654us 
+    1 1.1.1.1                                    56 249 14ms295us 
+    sent=2 received=2 packet-loss=0% min-rtt=13ms654us avg-rtt=13ms974us 
+   max-rtt=14ms295us 
+

@@ -1,0 +1,192 @@
+################ mikrotik0 ################
+Flags: D - DYNAMIC
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+#   ADDRESS        NETWORK     INTERFACE  VRF 
+0   10.9.0.225/30  10.9.0.224  ether2     main
+1   10.9.0.193/27  10.9.0.192  ether3     main
+2 D 10.0.2.15/24   10.0.2.0    ether1     main
+
+--- ping mikrotik1 (10.9.0.226)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.226                                 56  64 449us     
+    1 10.9.0.226                                 56  64 1ms34us   
+    2 10.9.0.226                                 56  64 1ms12us   
+    sent=3 received=3 packet-loss=0% min-rtt=449us avg-rtt=831us 
+   max-rtt=1ms34us 
+
+--- ping mikrotik2 (10.9.0.230)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.230                                 56  63 1ms654us  
+    1 10.9.0.230                                 56  63 2ms1us    
+    2 10.9.0.230                                 56  63 2ms189us  
+    sent=3 received=3 packet-loss=0% min-rtt=1ms654us avg-rtt=1ms948us 
+   max-rtt=2ms189us 
+
+--- ping mikrotik3 (10.9.0.234)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.234                                 56  62 1ms807us  
+    1 10.9.0.234                                 56  62 2ms842us  
+    2 10.9.0.234                                 56  62 2ms102us  
+    sent=3 received=3 packet-loss=0% min-rtt=1ms807us avg-rtt=2ms250us 
+   max-rtt=2ms842us 
+
+--- ping Internet
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 255 12ms256us 
+    1 1.1.1.1                                    56 255 13ms487us 
+    2 1.1.1.1                                    56 255 13ms40us  
+    sent=3 received=3 packet-loss=0% min-rtt=12ms256us avg-rtt=12ms927us 
+   max-rtt=13ms487us 
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 172.217.20.238                             56 255 12ms209us 
+    1 172.217.20.238                             56 255 12ms763us 
+    2 172.217.20.238                             56 255 12ms964us 
+    sent=3 received=3 packet-loss=0% min-rtt=12ms209us avg-rtt=12ms645us 
+   max-rtt=12ms964us 
+
+--- usuaris i claus SSH
+Columns: USER, KEY-TYPE, BITS, INFO
+#  USER      KEY-TYPE  BITS  INFO                      
+0  sysadmin  ed25519    256  vcorp_sysadmin@virtualcorp
+1  auditor   ed25519    256  vcorp_auditor@virtualcorp 
+
+################ mikrotik1 ################
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.226/30  10.9.0.224  ether2     main
+1 10.9.0.229/30  10.9.0.228  ether3     main
+2 10.9.0.1/25    10.9.0.0    ether4     main
+
+--- ping mikrotik0 (10.9.0.225)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.225                                 56  64 643us     
+    1 10.9.0.225                                 56  64 1ms229us  
+    2 10.9.0.225                                 56  64 1ms38us   
+    sent=3 received=3 packet-loss=0% min-rtt=643us avg-rtt=970us 
+   max-rtt=1ms229us 
+
+--- ping mikrotik2 (10.9.0.230)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.230                                 56  64 669us     
+    1 10.9.0.230                                 56  64 852us     
+    2 10.9.0.230                                 56  64 847us     
+    sent=3 received=3 packet-loss=0% min-rtt=669us avg-rtt=789us 
+   max-rtt=852us 
+
+--- ping mikrotik3 (10.9.0.234)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.234                                 56  63 2ms196us  
+    1 10.9.0.234                                 56  63 1ms724us  
+    2 10.9.0.234                                 56  63 1ms885us  
+    sent=3 received=3 packet-loss=0% min-rtt=1ms724us avg-rtt=1ms935us 
+   max-rtt=2ms196us 
+
+--- ping Internet
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 253 13ms207us 
+    1 1.1.1.1                                    56 253 13ms307us 
+    2 1.1.1.1                                    56 253 13ms552us 
+    sent=3 received=3 packet-loss=0% min-rtt=13ms207us avg-rtt=13ms355us 
+   max-rtt=13ms552us 
+
+failure: resolve failed (:ping; line 1)
+--- usuaris i claus SSH
+Columns: USER, KEY-TYPE, BITS, INFO
+#  USER      KEY-TYPE  BITS  INFO                      
+0  sysadmin  ed25519    256  vcorp_sysadmin@virtualcorp
+1  auditor   ed25519    256  vcorp_auditor@virtualcorp 
+
+################ mikrotik2 ################
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.230/30  10.9.0.228  ether2     main
+1 10.9.0.233/30  10.9.0.232  ether3     main
+2 10.9.1.1/24    10.9.1.0    ether4     main
+3 10.9.2.1/24    10.9.2.0    ether5     main
+
+--- ping mikrotik0 (10.9.0.225)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.225                                 56  63 885us     
+    1 10.9.0.225                                 56  63 1ms881us  
+    2 10.9.0.225                                 56  63 1ms92us   
+    sent=3 received=3 packet-loss=0% min-rtt=885us avg-rtt=1ms286us 
+   max-rtt=1ms881us 
+
+--- ping mikrotik1 (10.9.0.226)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.226                                 56  64 422us     
+    1 10.9.0.226                                 56  64 809us     
+    2 10.9.0.226                                 56  64 1ms42us   
+    sent=3 received=3 packet-loss=0% min-rtt=422us avg-rtt=757us 
+   max-rtt=1ms42us 
+
+--- ping mikrotik3 (10.9.0.234)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.234                                 56  64 507us     
+    1 10.9.0.234                                 56  64 705us     
+    2 10.9.0.234                                 56  64 843us     
+    sent=3 received=3 packet-loss=0% min-rtt=507us avg-rtt=685us 
+   max-rtt=843us 
+
+--- ping Internet
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 251 14ms534us 
+    1 1.1.1.1                                    56 251 14ms889us 
+    2 1.1.1.1                                    56 251 13ms941us 
+    sent=3 received=3 packet-loss=0% min-rtt=13ms941us avg-rtt=14ms454us 
+   max-rtt=14ms889us 
+
+failure: resolve failed (:ping; line 1)
+--- usuaris i claus SSH
+Columns: USER, KEY-TYPE, BITS, INFO
+#  USER      KEY-TYPE  BITS  INFO                      
+0  sysadmin  ed25519    256  vcorp_sysadmin@virtualcorp
+1  auditor   ed25519    256  vcorp_auditor@virtualcorp 
+
+################ mikrotik3 ################
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+# ADDRESS        NETWORK     INTERFACE  VRF 
+0 10.9.0.234/30  10.9.0.232  ether2     main
+1 10.9.3.1/25    10.9.3.0    ether3     main
+2 10.9.3.129/25  10.9.3.128  ether4     main
+
+--- ping mikrotik0 (10.9.0.225)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.225                                 56  62 1ms633us  
+    1 10.9.0.225                                 56  62 1ms450us  
+    2 10.9.0.225                                 56  62 2ms286us  
+    sent=3 received=3 packet-loss=0% min-rtt=1ms450us avg-rtt=1ms789us 
+   max-rtt=2ms286us 
+
+--- ping mikrotik1 (10.9.0.226)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.226                                 56  63 857us     
+    1 10.9.0.226                                 56  63 1ms547us  
+    2 10.9.0.226                                 56  63 2ms51us   
+    sent=3 received=3 packet-loss=0% min-rtt=857us avg-rtt=1ms485us 
+   max-rtt=2ms51us 
+
+--- ping mikrotik2 (10.9.0.230)
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 10.9.0.230                                 56  64 924us     
+    1 10.9.0.230                                 56  64 928us     
+    2 10.9.0.230                                 56  64 958us     
+    sent=3 received=3 packet-loss=0% min-rtt=924us avg-rtt=936us 
+   max-rtt=958us 
+
+--- ping Internet
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 1.1.1.1                                    56 249 14ms167us 
+    1 1.1.1.1                                    56 249 15ms640us 
+    2 1.1.1.1                                    56 249 16ms795us 
+    sent=3 received=3 packet-loss=0% min-rtt=14ms167us avg-rtt=15ms534us 
+   max-rtt=16ms795us 
+
+failure: resolve failed (:ping; line 1)
+--- usuaris i claus SSH
+Columns: USER, KEY-TYPE, BITS, INFO
+#  USER      KEY-TYPE  BITS  INFO                      
+0  sysadmin  ed25519    256  vcorp_sysadmin@virtualcorp
+1  auditor   ed25519    256  vcorp_auditor@virtualcorp 
+

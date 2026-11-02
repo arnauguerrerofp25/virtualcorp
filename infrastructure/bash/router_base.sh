@@ -661,6 +661,7 @@ EOF
     if [[ "$nat" == true ]]; then
         cat >> "$rsc_file" <<EOF
 /ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+/ip ssh set forwarding-enabled=local
 EOF
     fi
 
