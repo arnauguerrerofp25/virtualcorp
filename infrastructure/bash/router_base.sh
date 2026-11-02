@@ -571,14 +571,25 @@ EOF
         "$AUDIT_PUB_KEY_FILE" \
         admin@127.0.0.1:auditor.pub \
         || return 1
+    local intent
+    for intent in 1 2 3 4 5; do
+        if ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -p "$ssh_port" \
+            admin@127.0.0.1 \
+            "/user ssh-keys import user=auditor public-key-file=auditor.pub"; then
+            break
+        fi
 
-    ssh \
-        -o StrictHostKeyChecking=no \
-        -o UserKnownHostsFile=/dev/null \
-        -p "$ssh_port" \
-        admin@127.0.0.1 \
-        "/user ssh-keys import user=auditor public-key-file=auditor.pub" \
-        || return 1
+        if (( intent == 5 )); then
+            log_err "No s'ha pogut importar la clau de l'auditor a '$name'."
+            return 1
+        fi
+
+        log_warn "auditor.pub encara no disponible; reintent $intent/5..."
+        sleep 2
+    done
     log_ok "Bootstrap de '$name' completat"
 }
 
