@@ -1,0 +1,84 @@
+# Activitat 2 - Evidències de creació dels templates Debian (make create_templates)
+# Generat el 2026-11-15 16:34 a partir dels logs de l'execució.
+
+================ tpl-debian-server (templates-server.log) ================
+[INFO] Verificant ISO existent 'debian-13.7.0-amd64-netinst.iso'...
+[ OK ] ISO 'debian-13.7.0-amd64-netinst.iso' ja descarregada i verificada
+[INFO] Generant ISO desatesa 'tpl-debian-server-preseed.iso'
+[INFO] Creant VM 'tpl-debian-server' (1 CPU, 1024 MB RAM, 10240 MB de disc)
+[INFO] Instal·lació desatesa de 'tpl-debian-server' (uns 15 minuts)...
+[INFO] ... instal·lant 'tpl-debian-server' (2 min)
+[ OK ] Instal·lació de 'tpl-debian-server' completada (2 min)
+[ OK ] Snapshot 'base' de 'tpl-debian-server' creat
+[INFO] Provant 'tpl-debian-server' amb el clon enllaçat temporal 'tpl-debian-server-prova'
+[INFO] Esperant servei SSH a 127.0.0.1:2299 (màx 180s)...
+[INFO] SSH disponible a 127.0.0.1:2299!
+--- usuari
+uid=1000(sysadmin) gid=1000(sysadmin) grups=1000(sysadmin),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),103(bluetooth)
+--- sudo
+sudo sense contrasenya: OK
+--- claus autoritzades
+256 SHA256:Wa3tRg8/jZAm98y9Q0wty768Yxd6emEf9KKbJHCqpCc vcorp_sysadmin@virtualcorp (ED25519)
+256 SHA256:l4PBUaqvAae9BinLB1rAZ4xd+dEG+9AQNton9AzfICg vcorp_auditor@virtualcorp (ED25519)
+--- xarxa
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             10.0.2.15/24 fd17:625c:f037:2:9cfe:c15:9174:c201/64 fe80::15d3:5929:cad8:4126/64 
+--- components
+Sense entorn gràfic: OK
+[ OK ] Prova de 'tpl-debian-server' correcta: sysadmin, sudo i les 2 claus SSH
+[ OK ] Template 'tpl-debian-server' creat i verificat
+[WARN] El template 'tpl-debian-desktop' ja existeix. S'omet.
+[INFO] ==========================================
+[INFO] [+] Templates creats correctament.
+[INFO] ==========================================
+EXIT=0
+
+================ tpl-debian-desktop (templates-desktop.log) ================
+[WARN] El template 'tpl-debian-server' ja existeix. S'omet.
+[INFO] Verificant ISO existent 'debian-13.7.0-amd64-netinst.iso'...
+[ OK ] ISO 'debian-13.7.0-amd64-netinst.iso' ja descarregada i verificada
+[INFO] Generant ISO desatesa 'tpl-debian-desktop-preseed.iso'
+[INFO] Creant VM 'tpl-debian-desktop' (2 CPU, 2048 MB RAM, 16384 MB de disc)
+[INFO] Instal·lació desatesa de 'tpl-debian-desktop' (uns 15 minuts)...
+[INFO] ... instal·lant 'tpl-debian-desktop' (2 min)
+[ OK ] Instal·lació de 'tpl-debian-desktop' completada (3 min)
+[ OK ] Snapshot 'base' de 'tpl-debian-desktop' creat
+[INFO] Provant 'tpl-debian-desktop' amb el clon enllaçat temporal 'tpl-debian-desktop-prova'
+[INFO] Esperant servei SSH a 127.0.0.1:2299 (màx 180s)...
+[INFO] SSH disponible a 127.0.0.1:2299!
+--- usuari
+uid=1000(sysadmin) gid=1000(sysadmin) grups=1000(sysadmin),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),103(bluetooth)
+--- sudo
+sudo sense contrasenya: OK
+--- claus autoritzades
+256 SHA256:Wa3tRg8/jZAm98y9Q0wty768Yxd6emEf9KKbJHCqpCc vcorp_sysadmin@virtualcorp (ED25519)
+256 SHA256:l4PBUaqvAae9BinLB1rAZ4xd+dEG+9AQNton9AzfICg vcorp_auditor@virtualcorp (ED25519)
+--- xarxa
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             10.0.2.15/24 fd17:625c:f037:2:a13f:72e2:c6df:87cc/64 fe80::f500:88dc:cf6f:d5fb/64 
+--- components
+falkon 25.04.1-1
+lxqt-core 33.2
+sddm 0.21.0+git20250502.4fe234b-2
+Sense Firefox ni LibreOffice: OK
+Arrencada per defecte: graphical.target
+[ OK ] Prova de 'tpl-debian-desktop' correcta: sysadmin, sudo i les 2 claus SSH
+[ OK ] Template 'tpl-debian-desktop' creat i verificat
+[INFO] ==========================================
+[INFO] [+] Templates creats correctament.
+[INFO] ==========================================
+EXIT=0
+
+================ Incidència: primer intent de tpl-debian-desktop (bloquejat) ================
+# L'apt-get del late_command esperava el CD (font cdrom encara activa).
+# Diagnòstic: consola de l'instal·lador amb el procés /usr/lib/apt/methods/cdrom actiu.
+# Solució: desactivar la font cdrom abans d'instal·lar l'entorn gràfic (commit 2ba608e).
+[WARN] El template 'tpl-debian-server' ja existeix. S'omet.
+[INFO] Verificant ISO existent 'debian-13.7.0-amd64-netinst.iso'...
+[ OK ] ISO 'debian-13.7.0-amd64-netinst.iso' ja descarregada i verificada
+[INFO] Generant ISO desatesa 'tpl-debian-desktop-preseed.iso'
+[INFO] Creant VM 'tpl-debian-desktop' (2 CPU, 2048 MB RAM, 16384 MB de disc)
+[INFO] Instal·lació desatesa de 'tpl-debian-desktop' (uns 15 minuts)...
+make: *** [Makefile:46: create_templates] Terminado
+EXIT=2
+# Línies de progrés sense avançar abans d aturar-lo: 14

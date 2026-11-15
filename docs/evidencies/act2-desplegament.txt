@@ -1,0 +1,102 @@
+# Activitat 2 - Evidències del desplegament (make deploy_equipment)
+# Generat el 2026-11-15 16:34 a partir dels logs de l'execució.
+
+================ 1a execució: 17 clons enllaçats (deploy-equipment.log) ================
+[INFO] Clon enllaçat 'dbsrv' ← 'tpl-debian-server' (xarxa 'privada', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'infosrv' ← 'tpl-debian-server' (xarxa 'privada', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'websrv' ← 'tpl-debian-server' (xarxa 'dmz', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'printer0' ← 'tpl-debian-server' (xarxa 'pl0', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'printer1' ← 'tpl-debian-server' (xarxa 'pl1', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'printer2' ← 'tpl-debian-server' (xarxa 'pl2', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'printer3' ← 'tpl-debian-server' (xarxa 'pl3', 1 CPU, 512 MB)
+[INFO] Clon enllaçat 'expo1' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'expo2' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'expo3' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'expo4' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'conserge1' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'conserge2' ← 'tpl-debian-desktop' (xarxa 'pl0', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'pl1-pc01' ← 'tpl-debian-desktop' (xarxa 'pl1', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'pl2-pc01' ← 'tpl-debian-desktop' (xarxa 'pl2', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'pl3-pc01' ← 'tpl-debian-desktop' (xarxa 'pl3', 1 CPU, 768 MB)
+[INFO] Clon enllaçat 'dir-pc01' ← 'tpl-debian-desktop' (xarxa 'pl3_direccio', 1 CPU, 768 MB)
+[INFO] Engegant 17 màquines per comprovar l'arrencada...
+[ OK ] 'dbsrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'infosrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'websrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer0' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer3' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo3' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo4' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'conserge1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'conserge2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl1-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl2-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl3-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'dir-pc01' ha arrencat i s'ha aturat de forma ordenada
+[INFO] ==========================================
+[INFO] [+] Equips desplegats correctament.
+[INFO] ==========================================
+EXIT=0
+
+================ 2a execució: instal·lació i verificació de pve01 (deploy-pve01.log) ================
+# Els 17 clons ja existien i s'ometen; es repeteix la prova d'arrencada.
+[INFO] Engegant 17 màquines per comprovar l'arrencada...
+[ OK ] 'dbsrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'infosrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'websrv' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer0' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'printer3' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo3' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'expo4' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'conserge1' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'conserge2' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl1-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl2-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'pl3-pc01' ha arrencat i s'ha aturat de forma ordenada
+[ OK ] 'dir-pc01' ha arrencat i s'ha aturat de forma ordenada
+[INFO] Descarregant http://download.proxmox.com/iso/proxmox-ve_9.2-1.iso
+[ OK ] ISO 'proxmox-ve_9.2-1.iso' descarregada i verificada
+[INFO] Validant l'answer file de 'pve01'
+[INFO] Generant ISO desatesa 'pve01-auto.iso'
+[ OK ] Contrasenya de root de 'pve01' desada a /home/arnau/.config/virtualcorp/pve01-root-password
+[INFO] Creant VM 'pve01' (4 CPU, 8192 MB RAM, 65536 MB de disc)
+[INFO] Instal·lació desatesa de 'pve01' (uns 15 minuts)...
+[ OK ] Instal·lació de 'pve01' completada (2 min)
+[INFO] Esperant SSH de 'pve01' (10.9.0.133) a través de mikrotik0...
+--- sistema
+pve01.virtualcorp.lan
+pve-manager/9.2.2/b9984c6d90a4bd80 (running kernel: 7.0.2-6-pve)
+--- xarxa
+vmbr0            UP             10.9.0.133/26 fe80::a00:27ff:fed5:fd03/64 
+default via 10.9.0.129 dev vmbr0 proto kernel onlink 
+--- claus autoritzades (root)
+256 SHA256:Wa3tRg8/jZAm98y9Q0wty768Yxd6emEf9KKbJHCqpCc vcorp_sysadmin@virtualcorp (ED25519)
+256 SHA256:l4PBUaqvAae9BinLB1rAZ4xd+dEG+9AQNton9AzfICg vcorp_auditor@virtualcorp (ED25519)
+4096 SHA256:YNzHxUQD+LTQS7L8h4dybZm9ce10EKLYjZ3Td3QxZ+k root@pve01 (RSA)
+--- virtualització anidada
+/dev/kvm: OK
+CPU amb extensions vmx/svm: 8
+kvm_intel             507904  0
+--- emmagatzematge
+Name             Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+local             dir     active        26590180         4188452        21025680   15.75%
+local-lvm     lvmthin     active        20901888               0        20901888    0.00%
+--- connectivitat
+ping 10.9.0.129: OK
+ping 10.9.0.226: OK
+ping 10.9.0.230: OK
+ping 10.9.0.234: OK
+ping 1.1.1.1: OK
+[ OK ] 'pve01' instal·lat i verificat (Proxmox VE, IP 10.9.0.133, virtualització anidada)
+[INFO] ==========================================
+[INFO] [+] Equips desplegats correctament.
+[INFO] ==========================================
+EXIT=0

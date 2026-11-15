@@ -1,0 +1,72 @@
+# Activitat 2 - Validació de la infraestructura a VirtualBox
+# Generat el 2026-11-15 16:34 amb VBoxManage 7.2.20r175154
+
+================ 1. Inventari de màquines virtuals ================
+MÀQUINA             GRUP                       ESTAT      CPU    RAM  INTERFÍCIES (mode:xarxa)
+mikrotik0            /VirtualCorp/Routers       running      1    256  nic1:NAT nic2:rt0_1 nic3:dmz nic4:privada 
+mikrotik1            /VirtualCorp/Routers       running      1    256  nic1:rt0_1 nic2:rt0_1 nic3:rt1_2 nic4:pl0 
+mikrotik2            /VirtualCorp/Routers       running      1    256  nic1:rt1_2 nic2:rt1_2 nic3:rt2_3 nic4:pl1 nic5:pl2 
+mikrotik3            /VirtualCorp/Routers       running      1    256  nic1:rt2_3 nic2:rt2_3 nic3:pl3 nic4:pl3_direccio 
+tpl-debian-desktop   /VirtualCorp/templates     poweroff     2   2048  
+tpl-debian-server    /VirtualCorp/templates     poweroff     1   1024  
+dbsrv                /VirtualCorp/Servidors     poweroff     1    512  nic1:privada 
+infosrv              /VirtualCorp/Servidors     poweroff     1    512  nic1:privada 
+websrv               /VirtualCorp/Servidors     poweroff     1    512  nic1:dmz 
+printer0             /VirtualCorp/Impressores   poweroff     1    512  nic1:pl0 
+printer1             /VirtualCorp/Impressores   poweroff     1    512  nic1:pl1 
+printer2             /VirtualCorp/Impressores   poweroff     1    512  nic1:pl2 
+printer3             /VirtualCorp/Impressores   poweroff     1    512  nic1:pl3 
+expo1                /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+expo2                /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+expo3                /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+expo4                /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+conserge1            /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+conserge2            /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl0 
+pl1-pc01             /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl1 
+pl2-pc01             /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl2 
+pl3-pc01             /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl3 
+dir-pc01             /VirtualCorp/Escriptori    poweroff     1    768  nic1:pl3_direccio 
+pve01                /VirtualCorp/Servidors     poweroff     4   8192  nic1:privada 
+# Només es mostren les interfícies amb el cable connectat.
+
+================ 2. Comparació amb l'inventari (configs/equipment.csv) ================
+Màquines de l'inventari correctes (nom, grup, xarxa, CPU, RAM): 17 · diferències: 0
+
+================ 3. Interfícies en mode NAT (totes les VM) ================
+mikrotik0: 1 interfície(s) NAT
+# Resultat esperat: només mikrotik0 (router0, sortida a Internet).
+
+================ 4. Clonació enllaçada ================
+CLON         DISC (MB)  DISC BASE (template)
+dbsrv               28  tpl-debian-server.vdi
+infosrv             28  tpl-debian-server.vdi
+websrv              28  tpl-debian-server.vdi
+printer0            28  tpl-debian-server.vdi
+printer1            28  tpl-debian-server.vdi
+printer2            28  tpl-debian-server.vdi
+printer3            28  tpl-debian-server.vdi
+expo1               39  tpl-debian-desktop.vdi
+expo2               40  tpl-debian-desktop.vdi
+expo3               39  tpl-debian-desktop.vdi
+expo4               39  tpl-debian-desktop.vdi
+conserge1           40  tpl-debian-desktop.vdi
+conserge2           40  tpl-debian-desktop.vdi
+pl1-pc01            39  tpl-debian-desktop.vdi
+pl2-pc01            40  tpl-debian-desktop.vdi
+pl3-pc01            40  tpl-debian-desktop.vdi
+dir-pc01            40  tpl-debian-desktop.vdi
+
+================ 5. Templates ================
+tpl-debian-server: grup=/VirtualCorp/templates estat=poweroff nic1=intnet/cable off snapshot=base
+tpl-debian-desktop: grup=/VirtualCorp/templates estat=poweroff nic1=intnet/cable off snapshot=base
+
+================ 6. pve01 ================
+groups          /VirtualCorp/Servidors
+cpus            4
+memory          8192
+nested-hw-virt  on
+firmware        BIOS
+nic1            intnet
+intnet1         privada
+description     Node Proxmox VE del CPD. IP fixa: 10.9.0.133
+disc (MB)       4241 ocupats de 65536 MBytes
