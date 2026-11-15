@@ -34,6 +34,13 @@ Tots els segments són xarxes internes de VirtualBox amb els noms exactes que fi
 
 Encaminament: RIP entre els quatre routers. `mikrotik0` fa NAT (masquerade) cap a Internet per la NIC1.
 
+Els diagrames lògic i físic i les taules completes d'adreçament són al PDF del disseny de xarxa: `docs/disseny-xarxa-delegacio09.pdf`. Es genera a partir de `docs/disseny-xarxa/disseny-xarxa.html` amb:
+
+```bash
+google-chrome --headless --no-pdf-header-footer \
+  --print-to-pdf=docs/disseny-xarxa-delegacio09.pdf docs/disseny-xarxa/disseny-xarxa.html
+```
+
 ### 2.2. Inventari d'equips
 
 | Màquina | Base | Xarxa | IP prevista | vCPU | RAM | Rol |
