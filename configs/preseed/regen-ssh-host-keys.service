@@ -1,0 +1,11 @@
+[Unit]
+Description=Regenerar les claus de host SSH (primera arrencada d'un clon)
+ConditionPathExists=!/etc/ssh/ssh_host_ed25519_key
+Before=ssh.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ssh-keygen -A
+
+[Install]
+WantedBy=multi-user.target
