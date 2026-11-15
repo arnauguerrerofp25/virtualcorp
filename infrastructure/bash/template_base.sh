@@ -246,6 +246,7 @@ seal_template() {
 
 run_template_checks() {
     local clone="$1"
+    local extra_checks="$2"
     local port="$TEMPLATE_TEST_SSH_PORT"
 
     "$VBOXMANAGE_BIN" modifyvm "$clone" \
@@ -257,18 +258,24 @@ run_template_checks() {
 
     wait_ssh 127.0.0.1 "$port" 180 || return 1
 
-    ssh "${SSH_TEST_OPTS[@]}" -p "$port" sysadmin@127.0.0.1 'sh -ec "
-        echo \"--- usuari\";  id
-        echo \"--- sudo\";    sudo -n true && echo \"sudo sense contrasenya: OK\"
-        echo \"--- claus autoritzades\"
-        ssh-keygen -lf ~/.ssh/authorized_keys
-        test \"\$(wc -l < ~/.ssh/authorized_keys)\" -eq 2
-        echo \"--- xarxa\";   ip -brief address
-    "' || return 1
+    # Les comprovacions s'envien per l'entrada estàndard per evitar
+    # problemes de cometes; extra_checks són les pròpies de cada template.
+    {
+        cat <<'EOF'
+echo "--- usuari"; id
+echo "--- sudo"; sudo -n true && echo "sudo sense contrasenya: OK"
+echo "--- claus autoritzades"
+ssh-keygen -lf ~/.ssh/authorized_keys
+test "$(wc -l < ~/.ssh/authorized_keys)" -eq 2
+echo "--- xarxa"; ip -brief address
+EOF
+        printf '%s\n' "$extra_checks"
+    } | ssh "${SSH_TEST_OPTS[@]}" -p "$port" sysadmin@127.0.0.1 'sh -e' || return 1
 }
 
 test_template() {
     local name="$1"
+    local extra_checks="$2"
     local clone="${name}-prova"
     local rc=0
 
@@ -280,7 +287,7 @@ test_template() {
         --name "$clone" \
         --register >/dev/null || return 1
 
-    run_template_checks "$clone" || rc=1
+    run_template_checks "$clone" "$extra_checks" || rc=1
 
     "$VBOXMANAGE_BIN" controlvm "$clone" poweroff &>/dev/null || true
     sleep 3
@@ -299,7 +306,7 @@ test_template() {
 # =========================================================
 # CREACIÓ COMPLETA D'UN TEMPLATE
 # =========================================================
-# Ús: create_debian_template <nom> <preseed> <cpus> <memòria_MB> <disc_MB>
+# Ús: create_debian_template <nom> <preseed> <cpus> <memòria_MB> <disc_MB> [comprovacions]
 
 create_debian_template() {
     local name="$1"
@@ -307,6 +314,7 @@ create_debian_template() {
     local cpus="$3"
     local memory="$4"
     local disk_mb="$5"
+    local extra_checks="${6:-}"
     local iso="${ISO_DIR}/${name}-preseed.iso"
 
     if vm_exists "$name"; then
@@ -324,7 +332,7 @@ create_debian_template() {
     create_template_vm "$name" "$iso" "$cpus" "$memory" "$disk_mb" || return 1
     install_template "$name" "$iso" || return 1
     seal_template "$name" || return 1
-    test_template "$name" || return 1
+    test_template "$name" "$extra_checks" || return 1
 
     log_ok "Template '$name' creat i verificat"
 }
