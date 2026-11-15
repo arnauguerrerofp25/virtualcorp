@@ -1,8 +1,9 @@
 # =========================================================
 # Answer file: instal·lació desatesa de pve01 (Proxmox VE)
 # =========================================================
-# Plantilla: deploy_equipment substitueix @ROOT_PASSWORD_HASH@ (contrasenya
-# aleatòria, fora del repositori) i @ROOT_SSH_KEYS@ (claus de configs/ssh/).
+# Plantilla: deploy_equipment substitueix els marcadors ROOT_PASSWORD_HASH
+# (contrasenya aleatòria, fora del repositori) i ROOT_SSH_KEYS (claus de
+# configs/ssh/), escrits entre arroves.
 
 [global]
 keyboard = "es"
