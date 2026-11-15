@@ -87,3 +87,46 @@ wait_ssh() {
     log_error "Timeout: SSH no disponible a ${ip}:${port} després de ${max_wait}s."
     return 1
 }
+
+# =========================================================
+# DESCÀRREGA I VERIFICACIÓ D'ISO
+# =========================================================
+# Descarrega una ISO fixada a configs/iso_versions.conf i en verifica el
+# SHA256. Si ja existeix i és correcta, no es torna a descarregar.
+# Ús: download_iso <url> <fitxer> <sha256>
+
+download_iso() {
+    local url="$1"
+    local filename="$2"
+    local sha256="$3"
+    local iso_path="${ISO_DIR}/${filename}"
+
+    mkdir -p "$ISO_DIR" || return 1
+
+    if [[ -f "$iso_path" ]]; then
+        log_info "Verificant ISO existent '$filename'..."
+        if echo "${sha256}  ${iso_path}" | sha256sum --check --status; then
+            log_ok "ISO '$filename' ja descarregada i verificada"
+            return 0
+        fi
+        log_warn "SHA256 incorrecte a '$filename': es torna a descarregar"
+        rm -f "$iso_path"
+    fi
+
+    log_info "Descarregant $url"
+    if ! curl -fL --retry 3 -o "${iso_path}.part" "$url"; then
+        log_err "No s'ha pogut descarregar '$filename' des de la URL fixada."
+        log_err "No es canvia de versió ni d'URL automàticament: reviseu configs/iso_versions.conf."
+        rm -f "${iso_path}.part"
+        return 1
+    fi
+
+    if ! echo "${sha256}  ${iso_path}.part" | sha256sum --check --status; then
+        log_err "El SHA256 de '$filename' no coincideix amb el fixat a la configuració."
+        rm -f "${iso_path}.part"
+        return 1
+    fi
+
+    mv "${iso_path}.part" "$iso_path"
+    log_ok "ISO '$filename' descarregada i verificada"
+}
