@@ -11,7 +11,7 @@ export VBOX_ROOT_GROUP VM_ROUTERS_GROUP VM_TEMPLATES_GROUP VBOXMANAGE_BIN
 BASH_DIR := $(PROJECT_ROOT)/infrastructure/bash
 BOOTSTRAP_DIR := $(PROJECT_ROOT)/automation/scripts/bootstrap
 
-.PHONY: help deploy-routers delete-routers reset-routers reset_routers ssh-keys routeros-box create_templates
+.PHONY: help deploy-routers delete-routers reset-routers reset_routers ssh-keys routeros-box create_templates deploy_equipment
 
 help:
 	@printf '%s\n' \
@@ -21,7 +21,8 @@ help:
 	  '  reset-routers   Delete and redeploy the router VMs' \
 	  '  ssh-keys        Generate the project SSH keys' \
 	  '  routeros-box    Build the RouterOS Vagrant box' \
-	  '  create_templates Create the Debian VM templates'
+	  '  create_templates Create the Debian VM templates' \
+	  '  deploy_equipment Deploy servers, printers and desktops'
 
 deploy-routers:
 	"$(BASH_DIR)/deploy_routers.sh"
@@ -44,3 +45,6 @@ routeros-box:
 
 create_templates:
 	"$(BASH_DIR)/create_templates.sh"
+
+deploy_equipment:
+	"$(BASH_DIR)/deploy_equipment.sh"
