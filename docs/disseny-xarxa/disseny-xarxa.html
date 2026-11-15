@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<title>Disseny de xarxa · Delegació 09</title>
+<!--
+  Font del PDF docs/disseny-xarxa-delegacio09.pdf. Per regenerar-lo:
+  google-chrome --headless --no-pdf-header-footer \
+    --print-to-pdf=docs/disseny-xarxa-delegacio09.pdf docs/disseny-xarxa/disseny-xarxa.html
+-->
+<style>
+  @page { size: A4; margin: 14mm 15mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; font-size: 9.5pt; color: #1d2430; margin: 0; line-height: 1.35; }
+  h1 { font-size: 20pt; margin: 0 0 4px; color: #12355b; }
+  h2 { font-size: 13pt; color: #12355b; border-bottom: 2px solid #12355b; padding-bottom: 3px; margin: 18px 0 8px; }
+  h3 { font-size: 10.5pt; margin: 12px 0 5px; color: #12355b; }
+  p { margin: 4px 0 6px; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+  .cover { border-left: 6px solid #12355b; padding: 8px 0 8px 14px; margin-bottom: 14px; }
+  .meta { color: #4a5568; font-size: 9pt; }
+  .meta b { color: #1d2430; }
+  table { border-collapse: collapse; width: 100%; margin: 4px 0 10px; font-size: 8.6pt; break-inside: auto; }
+  th, td { border: 1px solid #b8c2cf; padding: 3px 6px; text-align: left; vertical-align: top; }
+  th { background: #e6edf5; color: #12355b; }
+  tr { break-inside: avoid; }
+  code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.3pt; }
+  .note { font-size: 8.4pt; color: #4a5568; }
+  ul { margin: 4px 0 8px 18px; padding: 0; }
+  li { margin: 2px 0; }
+  .nw { white-space: nowrap; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ===================================================== -->
+<!-- PÀGINA 1: PORTADA I DIAGRAMA LÒGIC                     -->
+<!-- ===================================================== -->
+<section class="page">
+  <div class="cover">
+    <h1>Disseny de xarxa · Delegació 09</h1>
+    <div class="meta">
+      <b>VirtualCorp</b> · Rang assignat <b>10.9.0.0/16</b> · Responsable: <b>Arnau Guerrero Asensio</b><br>
+      Versió: <b>Activitat 2 – deploy_equipment</b> · Data: <b>15/11/2026</b>
+    </div>
+  </div>
+
+  <h2>1. Diagrama lògic</h2>
+
+  <svg viewBox="0 0 680 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama lògic de la xarxa de la delegació 09">
+    <defs>
+      <style>
+        .rt { fill: #12355b; }
+        .rtt { fill: #fff; font-size: 12px; font-weight: bold; }
+        .rts { fill: #cfe0f2; font-size: 9.5px; }
+        .seg { fill: #f3f7fb; stroke: #6f8fb3; stroke-width: 1.2; }
+        .segp { fill: #fff6e8; stroke: #c98a2b; stroke-width: 1.2; }
+        .segd { fill: #fdeeee; stroke: #c0504d; stroke-width: 1.2; }
+        .segx { fill: #eef7ee; stroke: #4f8a4f; stroke-width: 1.2; }
+        .h { font-size: 11.5px; font-weight: bold; fill: #12355b; }
+        .s { font-size: 9.5px; fill: #4a5568; }
+        .t { font-size: 10px; fill: #1d2430; }
+        .lk { stroke: #12355b; stroke-width: 2.5; }
+        .lks { stroke: #6f8fb3; stroke-width: 1.6; }
+        .lkl { font-size: 9.5px; fill: #12355b; }
+        .lkb { fill: #fff; }
+      </style>
+    </defs>
+
+    <!-- Internet -->
+    <ellipse cx="340" cy="30" rx="70" ry="22" fill="#e6edf5" stroke="#6f8fb3"/>
+    <text x="340" y="34" text-anchor="middle" class="h">Internet (ISP)</text>
+    <line x1="340" y1="52" x2="340" y2="92" class="lk" stroke-dasharray="5 3"/>
+    <rect x="348" y="62" width="122" height="16" class="lkb"/>
+    <text x="352" y="74" class="lkl">ether1 · NAT (masquerade)</text>
+
+    <!-- mikrotik0 -->
+    <rect x="260" y="92" width="160" height="54" rx="6" class="rt"/>
+    <text x="340" y="114" text-anchor="middle" class="rtt">mikrotik0 (router0)</text>
+    <text x="340" y="131" text-anchor="middle" class="rts">sortida a Internet · RIP</text>
+
+    <!-- DMZ -->
+    <rect x="10" y="78" width="200" height="98" rx="6" class="segd"/>
+    <text x="20" y="96" class="h">dmz · 10.9.0.192/27</text>
+    <text x="20" y="111" class="s">passarel·la .193 (mikrotik0 ether3)</text>
+    <text x="20" y="130" class="t">websrv · 10.9.0.197</text>
+    <text x="20" y="146" class="s">Reservades: .198 i .199</text>
+    <text x="20" y="162" class="s">(futurs serveis públics)</text>
+    <line x1="210" y1="119" x2="260" y2="119" class="lks"/>
+
+    <!-- Privada -->
+    <rect x="470" y="78" width="200" height="98" rx="6" class="segp"/>
+    <text x="480" y="96" class="h">privada · 10.9.0.128/26</text>
+    <text x="480" y="111" class="s">passarel·la .129 (mikrotik0 ether4)</text>
+    <text x="480" y="130" class="t">pve01 · 10.9.0.133 (fixa)</text>
+    <text x="480" y="146" class="t">dbsrv · 10.9.0.134</text>
+    <text x="480" y="162" class="t">infosrv · 10.9.0.135</text>
+    <line x1="420" y1="119" x2="470" y2="119" class="lks"/>
+
+    <!-- rt0_1 -->
+    <line x1="340" y1="146" x2="340" y2="262" class="lk"/>
+    <rect x="348" y="186" width="148" height="34" class="lkb"/>
+    <text x="352" y="198" class="lkl">rt0_1 · 10.9.0.224/30</text>
+    <text x="352" y="212" class="lkl">.225 (ether2) ↔ .226 (ether2)</text>
+
+    <!-- mikrotik1 -->
+    <rect x="260" y="262" width="160" height="54" rx="6" class="rt"/>
+    <text x="340" y="284" text-anchor="middle" class="rtt">mikrotik1 (router1)</text>
+    <text x="340" y="301" text-anchor="middle" class="rts">ruta per defecte → .225</text>
+
+    <!-- pl0 -->
+    <rect x="10" y="228" width="200" height="128" rx="6" class="seg"/>
+    <text x="20" y="246" class="h">pl0 · 10.9.0.0/25</text>
+    <text x="20" y="261" class="s">passarel·la .1 (mikrotik1 ether4)</text>
+    <text x="20" y="280" class="t">expo1–expo4 · .33 – .36</text>
+    <text x="20" y="296" class="t">conserge1–2 · .37 – .38</text>
+    <text x="20" y="312" class="t">printer0 · 10.9.0.65</text>
+    <text x="20" y="330" class="s">Consergeria, expositors i</text>
+    <text x="20" y="344" class="s">altres equips de planta baixa</text>
+    <line x1="210" y1="289" x2="260" y2="289" class="lks"/>
+
+    <!-- rt1_2 -->
+    <line x1="340" y1="316" x2="340" y2="432" class="lk"/>
+    <rect x="348" y="356" width="148" height="34" class="lkb"/>
+    <text x="352" y="368" class="lkl">rt1_2 · 10.9.0.228/30</text>
+    <text x="352" y="382" class="lkl">.229 (ether3) ↔ .230 (ether2)</text>
+
+    <!-- mikrotik2 -->
+    <rect x="260" y="432" width="160" height="54" rx="6" class="rt"/>
+    <text x="340" y="454" text-anchor="middle" class="rtt">mikrotik2 (router2)</text>
+    <text x="340" y="471" text-anchor="middle" class="rts">ruta per defecte → .229</text>
+
+    <!-- pl1 -->
+    <rect x="10" y="410" width="200" height="98" rx="6" class="seg"/>
+    <text x="20" y="428" class="h">pl1 · 10.9.1.0/24</text>
+    <text x="20" y="443" class="s">passarel·la .1 (mikrotik2 ether4)</text>
+    <text x="20" y="462" class="t">printer1 · 10.9.1.65</text>
+    <text x="20" y="478" class="t">pl1-pc01 · dinàmica (DHCP)</text>
+    <text x="20" y="496" class="s">Desenvolupament i projectes</text>
+    <line x1="210" y1="459" x2="260" y2="459" class="lks"/>
+
+    <!-- pl2 -->
+    <rect x="470" y="410" width="200" height="98" rx="6" class="seg"/>
+    <text x="480" y="428" class="h">pl2 · 10.9.2.0/24</text>
+    <text x="480" y="443" class="s">passarel·la .1 (mikrotik2 ether5)</text>
+    <text x="480" y="462" class="t">printer2 · 10.9.2.65</text>
+    <text x="480" y="478" class="t">pl2-pc01 · dinàmica (DHCP)</text>
+    <text x="480" y="496" class="s">Desenvolupament i projectes</text>
+    <line x1="420" y1="459" x2="470" y2="459" class="lks"/>
+
+    <!-- rt2_3 -->
+    <line x1="340" y1="486" x2="340" y2="602" class="lk"/>
+    <rect x="348" y="526" width="148" height="34" class="lkb"/>
+    <text x="352" y="538" class="lkl">rt2_3 · 10.9.0.232/30</text>
+    <text x="352" y="552" class="lkl">.233 (ether3) ↔ .234 (ether2)</text>
+
+    <!-- mikrotik3 -->
+    <rect x="260" y="602" width="160" height="54" rx="6" class="rt"/>
+    <text x="340" y="624" text-anchor="middle" class="rtt">mikrotik3 (router3)</text>
+    <text x="340" y="641" text-anchor="middle" class="rts">ruta per defecte → .233</text>
+
+    <!-- pl3 -->
+    <rect x="10" y="580" width="200" height="98" rx="6" class="seg"/>
+    <text x="20" y="598" class="h">pl3 · 10.9.3.0/25</text>
+    <text x="20" y="613" class="s">passarel·la .1 (mikrotik3 ether3)</text>
+    <text x="20" y="632" class="t">printer3 · 10.9.3.65</text>
+    <text x="20" y="648" class="t">pl3-pc01 · dinàmica (DHCP)</text>
+    <text x="20" y="666" class="s">Departaments corporatius</text>
+    <line x1="210" y1="629" x2="260" y2="629" class="lks"/>
+
+    <!-- pl3_direccio -->
+    <rect x="470" y="580" width="200" height="98" rx="6" class="segx"/>
+    <text x="480" y="598" class="h">pl3_direccio · 10.9.3.128/25</text>
+    <text x="480" y="613" class="s">passarel·la .129 (mikrotik3 ether4)</text>
+    <text x="480" y="632" class="t">dir-pc01 · dinàmica (DHCP)</text>
+    <text x="480" y="650" class="s">Direcció: xarxa local aïllada</text>
+    <text x="480" y="666" class="s">de la resta d'usuaris</text>
+    <line x1="420" y1="629" x2="470" y2="629" class="lks"/>
+
+    <!-- Llegenda -->
+    <g transform="translate(10,700)">
+      <rect x="0" y="0" width="14" height="10" class="rt"/><text x="20" y="9" class="s">Router MikroTik</text>
+      <rect x="120" y="0" width="14" height="10" class="segd"/><text x="140" y="9" class="s">DMZ</text>
+      <rect x="185" y="0" width="14" height="10" class="segp"/><text x="205" y="9" class="s">Zona privada (CPD)</text>
+      <rect x="320" y="0" width="14" height="10" class="seg"/><text x="340" y="9" class="s">Xarxa d'usuaris</text>
+      <rect x="440" y="0" width="14" height="10" class="segx"/><text x="460" y="9" class="s">Xarxa aïllada de direcció</text>
+      <text x="0" y="32" class="s">Encaminament dinàmic RIP entre els 4 routers (redistribució de xarxes connectades). Totes les IP són de DHCP</text>
+      <text x="0" y="46" class="s">(reserves previstes) excepte pve01, que té IP fixa. Cada segment és una xarxa interna de VirtualBox amb el mateix nom.</text>
+    </g>
+  </svg>
+</section>
+
+<!-- ===================================================== -->
+<!-- PÀGINA 2: DIAGRAMA FÍSIC                               -->
+<!-- ===================================================== -->
+<section class="page">
+  <h2>2. Diagrama físic</h2>
+  <p>Distribució dels equips per plantes de l'edifici. Cada <i>switch</i> correspon a un segment de xarxa; al laboratori, és una xarxa interna de VirtualBox amb el mateix nom.</p>
+
+  <svg viewBox="0 0 680 830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama físic per plantes de la delegació 09">
+    <defs>
+      <style>
+        .fl { fill: #fafbfd; stroke: #8a99ad; stroke-width: 1.2; }
+        .flt { font-size: 12px; font-weight: bold; fill: #12355b; }
+        .fls { font-size: 9.5px; fill: #4a5568; }
+        .cpd { fill: #fff6e8; stroke: #c98a2b; stroke-width: 1.2; stroke-dasharray: 6 3; }
+        .cpdt { font-size: 10.5px; font-weight: bold; fill: #9a6418; }
+        .rt { fill: #12355b; }
+        .rtt { fill: #fff; font-size: 10.5px; font-weight: bold; }
+        .sw { fill: #e6edf5; stroke: #6f8fb3; stroke-width: 1.2; }
+        .swd { fill: #fdeeee; stroke: #c0504d; stroke-width: 1.2; }
+        .swp { fill: #fff6e8; stroke: #c98a2b; stroke-width: 1.2; }
+        .swx { fill: #eef7ee; stroke: #4f8a4f; stroke-width: 1.2; }
+        .swt { font-size: 10px; font-weight: bold; fill: #12355b; }
+        .eq { font-size: 9.5px; fill: #1d2430; }
+        .bb { stroke: #12355b; stroke-width: 3; fill: none; }
+        .ac { stroke: #6f8fb3; stroke-width: 1.6; fill: none; }
+        .bbl { font-size: 9px; fill: #12355b; }
+        .lb { fill: #fff; }
+      </style>
+    </defs>
+
+    <!-- ====== Planta 3 ====== -->
+    <rect x="10" y="10" width="660" height="150" rx="4" class="fl"/>
+    <text x="20" y="30" class="flt">Planta 3</text>
+    <text x="20" y="44" class="fls">10.9.3.0/24 · Departaments corporatius i direcció</text>
+    <rect x="520" y="60" width="130" height="38" rx="5" class="rt"/>
+    <text x="585" y="84" text-anchor="middle" class="rtt">mikrotik3</text>
+    <rect x="30" y="60" width="200" height="28" rx="4" class="sw"/>
+    <text x="40" y="78" class="swt">switch pl3</text>
+    <text x="40" y="106" class="eq">• pl3-pc01 (portàtils de departaments)</text>
+    <text x="40" y="122" class="eq">• printer3</text>
+    <rect x="270" y="60" width="200" height="28" rx="4" class="swx"/>
+    <text x="280" y="78" class="swt">switch pl3_direccio</text>
+    <text x="280" y="106" class="eq">• dir-pc01 (equips de direcció)</text>
+    <text x="280" y="122" class="eq">Xarxa aïllada de la resta</text>
+    <path d="M230 74 H250 V54 H560 V60" class="ac"/>
+    <path d="M470 74 H500 V79 H520" class="ac"/>
+
+    <!-- ====== Planta 2 ====== -->
+    <rect x="10" y="170" width="660" height="130" rx="4" class="fl"/>
+    <text x="20" y="190" class="flt">Planta 2</text>
+    <text x="20" y="204" class="fls">10.9.2.0/24 · Desenvolupament i projectes</text>
+    <rect x="30" y="220" width="200" height="28" rx="4" class="sw"/>
+    <text x="40" y="238" class="swt">switch pl2</text>
+    <text x="40" y="266" class="eq">• pl2-pc01 (portàtils de desenvolupament)</text>
+    <text x="40" y="282" class="eq">• printer2</text>
+    <path d="M230 234 H560 V360" class="ac"/>
+    <text x="300" y="228" class="bbl">cable vertical cap a mikrotik2</text>
+
+    <!-- ====== Planta 1 ====== -->
+    <rect x="10" y="310" width="660" height="130" rx="4" class="fl"/>
+    <text x="20" y="330" class="flt">Planta 1</text>
+    <text x="20" y="344" class="fls">10.9.1.0/24 · Desenvolupament i projectes</text>
+    <rect x="520" y="360" width="130" height="38" rx="5" class="rt"/>
+    <text x="585" y="384" text-anchor="middle" class="rtt">mikrotik2</text>
+    <rect x="30" y="360" width="200" height="28" rx="4" class="sw"/>
+    <text x="40" y="378" class="swt">switch pl1</text>
+    <text x="40" y="406" class="eq">• pl1-pc01 (portàtils de desenvolupament)</text>
+    <text x="40" y="422" class="eq">• printer1</text>
+    <path d="M230 374 H520" class="ac"/>
+
+    <!-- ====== Planta baixa ====== -->
+    <rect x="10" y="450" width="660" height="300" rx="4" class="fl"/>
+    <text x="20" y="470" class="flt">Planta baixa</text>
+    <text x="20" y="484" class="fls">10.9.0.0/24 · CPD, DMZ, consergeria i expositors</text>
+
+    <!-- Zona general pl0 -->
+    <rect x="30" y="500" width="200" height="28" rx="4" class="sw"/>
+    <text x="40" y="518" class="swt">switch pl0</text>
+    <text x="40" y="546" class="eq">Consergeria:</text>
+    <text x="50" y="561" class="eq">• conserge1, conserge2</text>
+    <text x="40" y="579" class="eq">Expositors (recepció):</text>
+    <text x="50" y="594" class="eq">• expo1, expo2, expo3, expo4</text>
+    <text x="40" y="612" class="eq">• printer0</text>
+
+    <!-- CPD -->
+    <rect x="260" y="495" width="400" height="245" rx="6" class="cpd"/>
+    <text x="272" y="512" class="cpdt">CPD</text>
+    <rect x="520" y="520" width="130" height="38" rx="5" class="rt"/>
+    <text x="585" y="544" text-anchor="middle" class="rtt">mikrotik1</text>
+    <rect x="520" y="660" width="130" height="38" rx="5" class="rt"/>
+    <text x="585" y="684" text-anchor="middle" class="rtt">mikrotik0</text>
+
+    <rect x="280" y="590" width="200" height="28" rx="4" class="swd"/>
+    <text x="290" y="608" class="swt">switch dmz</text>
+    <text x="290" y="634" class="eq">• websrv</text>
+    <rect x="280" y="660" width="200" height="28" rx="4" class="swp"/>
+    <text x="290" y="678" class="swt">switch privada</text>
+    <text x="290" y="704" class="eq">• pve01 (Proxmox VE) · dbsrv · infosrv</text>
+
+    <!-- Connexions d'accés -->
+    <path d="M230 514 H250 V539 H520" class="ac"/>
+    <path d="M480 604 H500 V668 H520" class="ac"/>
+    <path d="M480 674 H505 V688 H520" class="ac"/>
+
+    <!-- Troncal entre routers -->
+    <path d="M610 660 V558" class="bb"/>
+    <rect x="615" y="600" width="44" height="14" class="lb"/>
+    <text x="618" y="611" class="bbl">rt0_1</text>
+    <path d="M610 520 V398" class="bb"/>
+    <rect x="615" y="452" width="44" height="14" class="lb"/>
+    <text x="618" y="463" class="bbl">rt1_2</text>
+    <path d="M630 360 V98" class="bb"/>
+    <rect x="636" y="262" width="32" height="14" class="lb"/>
+    <text x="638" y="273" class="bbl">rt2_3</text>
+
+    <!-- ISP -->
+    <path d="M585 698 V770" class="bb" stroke-dasharray="6 3"/>
+    <text x="577" y="785" text-anchor="end" class="bbl">Entrada de l'ISP (ether1, NAT)</text>
+
+    <!-- Llegenda -->
+    <g transform="translate(10,800)">
+      <line x1="0" y1="5" x2="22" y2="5" class="bb"/><text x="28" y="9" class="fls">Enllaç troncal entre routers (/30)</text>
+      <line x1="210" y1="5" x2="232" y2="5" class="ac"/><text x="238" y="9" class="fls">Connexió d'un switch al router</text>
+      <rect x="420" y="0" width="14" height="10" class="cpd"/><text x="440" y="9" class="fls">Sala del CPD</text>
+    </g>
+  </svg>
+</section>
+
+<!-- ===================================================== -->
+<!-- PÀGINA 3: TAULES D'ADREÇAMENT                          -->
+<!-- ===================================================== -->
+<section class="page">
+  <h2>3. Pla d'adreçament</h2>
+
+  <h3>3.1. Subxarxes</h3>
+  <table>
+    <tr><th>Segment (xarxa interna)</th><th>Xarxa</th><th>Màscara</th><th>Passarel·la</th><th>Router</th><th>Ús</th></tr>
+    <tr><td><code>privada</code></td><td>10.9.0.128/26</td><td>255.255.255.192</td><td>10.9.0.129</td><td>mikrotik0</td><td>Zona privada del CPD</td></tr>
+    <tr><td><code>dmz</code></td><td>10.9.0.192/27</td><td>255.255.255.224</td><td>10.9.0.193</td><td>mikrotik0</td><td>Serveis exposats a Internet</td></tr>
+    <tr><td><code>pl0</code></td><td>10.9.0.0/25</td><td>255.255.255.128</td><td>10.9.0.1</td><td>mikrotik1</td><td>Zona general de planta baixa</td></tr>
+    <tr><td><code>pl1</code></td><td>10.9.1.0/24</td><td>255.255.255.0</td><td>10.9.1.1</td><td>mikrotik2</td><td>Planta 1: desenvolupament</td></tr>
+    <tr><td><code>pl2</code></td><td>10.9.2.0/24</td><td>255.255.255.0</td><td>10.9.2.1</td><td>mikrotik2</td><td>Planta 2: desenvolupament</td></tr>
+    <tr><td><code>pl3</code></td><td>10.9.3.0/25</td><td>255.255.255.128</td><td>10.9.3.1</td><td>mikrotik3</td><td>Planta 3: departaments</td></tr>
+    <tr><td><code>pl3_direccio</code></td><td>10.9.3.128/25</td><td>255.255.255.128</td><td>10.9.3.129</td><td>mikrotik3</td><td>Planta 3: direcció (aïllada)</td></tr>
+    <tr><td><code>rt0_1</code></td><td>10.9.0.224/30</td><td>255.255.255.252</td><td>—</td><td>mikrotik0 – mikrotik1</td><td>Enllaç router0 – router1</td></tr>
+    <tr><td><code>rt1_2</code></td><td>10.9.0.228/30</td><td>255.255.255.252</td><td>—</td><td>mikrotik1 – mikrotik2</td><td>Enllaç router1 – router2</td></tr>
+    <tr><td><code>rt2_3</code></td><td>10.9.0.232/30</td><td>255.255.255.252</td><td>—</td><td>mikrotik2 – mikrotik3</td><td>Enllaç router2 – router3</td></tr>
+  </table>
+  <p class="note">La xarxa 10.0.0.0/16 queda reservada per al NAT de VirtualBox (NIC1 de mikrotik0) i no forma part de l'adreçament de la delegació.</p>
+
+  <h3>3.2. Interfícies dels routers</h3>
+  <table>
+    <tr><th>Router</th><th>Interfície</th><th>Xarxa interna</th><th>Adreça</th><th>Funció</th></tr>
+    <tr><td rowspan="4">mikrotik0 (router0)</td><td>ether1</td><td>NAT VirtualBox</td><td>DHCP (10.0.2.15)</td><td>Sortida a Internet, NAT</td></tr>
+    <tr><td>ether2</td><td><code>rt0_1</code></td><td>10.9.0.225/30</td><td>Enllaç amb mikrotik1</td></tr>
+    <tr><td>ether3</td><td><code>dmz</code></td><td>10.9.0.193/27</td><td>Passarel·la de la DMZ</td></tr>
+    <tr><td>ether4</td><td><code>privada</code></td><td>10.9.0.129/26</td><td>Passarel·la de la zona privada</td></tr>
+    <tr><td rowspan="3">mikrotik1 (router1)</td><td>ether2</td><td><code>rt0_1</code></td><td>10.9.0.226/30</td><td>Enllaç amb mikrotik0 (ruta per defecte)</td></tr>
+    <tr><td>ether3</td><td><code>rt1_2</code></td><td>10.9.0.229/30</td><td>Enllaç amb mikrotik2</td></tr>
+    <tr><td>ether4</td><td><code>pl0</code></td><td>10.9.0.1/25</td><td>Passarel·la de la planta baixa</td></tr>
+    <tr><td rowspan="4">mikrotik2 (router2)</td><td>ether2</td><td><code>rt1_2</code></td><td>10.9.0.230/30</td><td>Enllaç amb mikrotik1 (ruta per defecte)</td></tr>
+    <tr><td>ether3</td><td><code>rt2_3</code></td><td>10.9.0.233/30</td><td>Enllaç amb mikrotik3</td></tr>
+    <tr><td>ether4</td><td><code>pl1</code></td><td>10.9.1.1/24</td><td>Passarel·la de la planta 1</td></tr>
+    <tr><td>ether5</td><td><code>pl2</code></td><td>10.9.2.1/24</td><td>Passarel·la de la planta 2</td></tr>
+    <tr><td rowspan="3">mikrotik3 (router3)</td><td>ether2</td><td><code>rt2_3</code></td><td>10.9.0.234/30</td><td>Enllaç amb mikrotik2 (ruta per defecte)</td></tr>
+    <tr><td>ether3</td><td><code>pl3</code></td><td>10.9.3.1/25</td><td>Passarel·la de departaments</td></tr>
+    <tr><td>ether4</td><td><code>pl3_direccio</code></td><td>10.9.3.129/25</td><td>Passarel·la de direcció</td></tr>
+  </table>
+  <p class="note">Encaminament: RIP (instància <code>rip1</code>, redistribució de xarxes connectades) a totes les interfícies internes. mikrotik0 té <code>forwarding-enabled=local</code> a SSH per fer de salt cap a la resta d'equips.</p>
+</section>
+
+<!-- ===================================================== -->
+<!-- PÀGINA 4: INVENTARI I DECISIONS                        -->
+<!-- ===================================================== -->
+<section class="page">
+  <h2>4. Inventari d'equips</h2>
+  <table>
+    <tr><th>Màquina</th><th>Template</th><th>Xarxa</th><th>IP</th><th class="nw">vCPU / RAM</th><th>Rol</th></tr>
+    <tr><td>pve01</td><td>ISO Proxmox</td><td><code>privada</code></td><td class="nw"><b>10.9.0.133/26 (fixa)</b></td><td class="nw">4 / 8192 MB</td><td>Node Proxmox VE del CPD (virtualització anidada)</td></tr>
+    <tr><td>dbsrv</td><td>Server</td><td><code>privada</code></td><td>10.9.0.134</td><td class="nw">1 / 512 MB</td><td>Bases de dades</td></tr>
+    <tr><td>infosrv</td><td>Server</td><td><code>privada</code></td><td>10.9.0.135</td><td class="nw">1 / 512 MB</td><td>Fitxers i documentació corporativa</td></tr>
+    <tr><td>websrv</td><td>Server</td><td><code>dmz</code></td><td>10.9.0.197</td><td class="nw">1 / 512 MB</td><td>Servidor web públic</td></tr>
+    <tr><td>printer0</td><td>Server</td><td><code>pl0</code></td><td>10.9.0.65</td><td class="nw">1 / 512 MB</td><td>Servidor d'impressió, planta baixa</td></tr>
+    <tr><td>printer1</td><td>Server</td><td><code>pl1</code></td><td>10.9.1.65</td><td class="nw">1 / 512 MB</td><td>Servidor d'impressió, planta 1</td></tr>
+    <tr><td>printer2</td><td>Server</td><td><code>pl2</code></td><td>10.9.2.65</td><td class="nw">1 / 512 MB</td><td>Servidor d'impressió, planta 2</td></tr>
+    <tr><td>printer3</td><td>Server</td><td><code>pl3</code></td><td>10.9.3.65</td><td class="nw">1 / 512 MB</td><td>Servidor d'impressió, planta 3</td></tr>
+    <tr><td>expo1 – expo4</td><td>Desktop</td><td><code>pl0</code></td><td>10.9.0.33 – .36</td><td class="nw">1 / 768 MB</td><td>Expositors (Linux)</td></tr>
+    <tr><td>conserge1 – conserge2</td><td>Desktop</td><td><code>pl0</code></td><td>10.9.0.37 – .38</td><td class="nw">1 / 768 MB</td><td>Consergeria</td></tr>
+    <tr><td>pl1-pc01</td><td>Desktop</td><td><code>pl1</code></td><td>dinàmica</td><td class="nw">1 / 768 MB</td><td>Desenvolupament, planta 1</td></tr>
+    <tr><td>pl2-pc01</td><td>Desktop</td><td><code>pl2</code></td><td>dinàmica</td><td class="nw">1 / 768 MB</td><td>Desenvolupament, planta 2</td></tr>
+    <tr><td>pl3-pc01</td><td>Desktop</td><td><code>pl3</code></td><td>dinàmica</td><td class="nw">1 / 768 MB</td><td>Departaments, planta 3</td></tr>
+    <tr><td>dir-pc01</td><td>Desktop</td><td><code>pl3_direccio</code></td><td>dinàmica</td><td class="nw">1 / 768 MB</td><td>Direcció (xarxa aïllada)</td></tr>
+  </table>
+  <p class="note">Excepte pve01, totes les màquines obtenen la configuració IP per DHCP. Les adreces de la columna «IP» són les reserves previstes al servei DHCP. Els equips basats en templates són clons enllaçats; l'inventari és a <code>configs/equipment.csv</code>.</p>
+
+  <h3>4.1. Adreces reservades i pendents</h3>
+  <table>
+    <tr><th>Element</th><th>Estat</th></tr>
+    <tr><td>10.9.0.198 i 10.9.0.199 (DMZ)</td><td>Reservades per a futurs serveis públics</td></tr>
+    <tr><td>Rangs dinàmics de DHCP de cada planta</td><td>Pendents de definir a l'activitat de configuració del DHCP</td></tr>
+    <tr><td>Servidors de projecte (web i dades de 2 projectes a la planta 1 i 1 a la planta 2)</td><td>S'allotjaran a pve01; IP fixes pendents d'assignar</td></tr>
+    <tr><td>DNS de la delegació</td><td>Pendent; pve01 fa servir 1.1.1.1 de manera provisional</td></tr>
+  </table>
+
+  <h2>5. Decisions de disseny</h2>
+  <ul>
+    <li><b>Zona privada a mikrotik0</b>, el router de sortida, que també té la DMZ: tres zones (WAN, DMZ i privada) al CPD de la planta baixa.</li>
+    <li><b>Ubicació dels routers:</b> mikrotik0 i mikrotik1 al CPD; mikrotik2 a la planta 1 (dona servei també a la planta 2); mikrotik3 a la planta 3.</li>
+    <li><b>Noms dels routers:</b> es mantenen <code>mikrotik0</code>–<code>mikrotik3</code> dels scripts; corresponen a router0–router3 de l'enunciat.</li>
+    <li><b>Planta 3</b> dividida en dos /25: departaments (<code>pl3</code>) i direcció aïllada (<code>pl3_direccio</code>).</li>
+    <li><b>Servidors del CPD:</b> websrv (procés, DMZ), pve01 (procés, zona privada), dbsrv i infosrv, amb les IP reservades per l'enunciat.</li>
+    <li><b>Equips d'usuari:</b> un equip representatiu per segment; se n'afegeixen més a l'inventari.</li>
+    <li><b>Servidors de projecte</b> a pve01 (virtualització i contenidors del CPD) en lloc de màquines de VirtualBox.</li>
+  </ul>
+</section>
+
+</body>
+</html>
