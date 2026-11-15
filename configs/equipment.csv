@@ -1,0 +1,20 @@
+# Inventari d'equips de la delegació 09 (activitat 2). pve01 té procediment propi.
+# ip_prevista: reserva DHCP futura (totes les màquines usen DHCP); només documental.
+# nom;template;xarxa;cpus;memoria_mb;grup;ip_prevista;rol
+dbsrv;tpl-debian-server;privada;1;512;Servidors;10.9.0.134;Servidor de bases de dades
+infosrv;tpl-debian-server;privada;1;512;Servidors;10.9.0.135;Servidor documental i de fitxers
+websrv;tpl-debian-server;dmz;1;512;Servidors;10.9.0.197;Servidor web públic
+printer0;tpl-debian-server;pl0;1;512;Impressores;10.9.0.65;Servidor d'impressió planta baixa
+printer1;tpl-debian-server;pl1;1;512;Impressores;10.9.1.65;Servidor d'impressió planta 1
+printer2;tpl-debian-server;pl2;1;512;Impressores;10.9.2.65;Servidor d'impressió planta 2
+printer3;tpl-debian-server;pl3;1;512;Impressores;10.9.3.65;Servidor d'impressió planta 3
+expo1;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.33;Expositor
+expo2;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.34;Expositor
+expo3;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.35;Expositor
+expo4;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.36;Expositor
+conserge1;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.37;Consergeria
+conserge2;tpl-debian-desktop;pl0;1;768;Escriptori;10.9.0.38;Consergeria
+pl1-pc01;tpl-debian-desktop;pl1;1;768;Escriptori;dinàmica;Desenvolupament planta 1
+pl2-pc01;tpl-debian-desktop;pl2;1;768;Escriptori;dinàmica;Desenvolupament planta 2
+pl3-pc01;tpl-debian-desktop;pl3;1;768;Escriptori;dinàmica;Departaments planta 3
+dir-pc01;tpl-debian-desktop;pl3_direccio;1;768;Escriptori;dinàmica;Direcció (xarxa aïllada)
