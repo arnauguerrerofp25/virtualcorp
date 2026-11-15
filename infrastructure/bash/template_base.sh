@@ -28,7 +28,8 @@ vm_exists() {
 }
 
 vm_state() {
-    "$VBOXMANAGE_BIN" showvminfo "$1" --machinereadable |
+    # Mentre una VM canvia d'estat, showvminfo pot mostrar errors transitoris
+    "$VBOXMANAGE_BIN" showvminfo "$1" --machinereadable 2>/dev/null |
         sed -n 's/^VMState="\(.*\)"$/\1/p'
 }
 
