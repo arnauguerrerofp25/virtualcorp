@@ -7,6 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 source "$SCRIPT_DIR/template_base.sh"
 source "$SCRIPT_DIR/equipment_base.sh"
+source "$SCRIPT_DIR/proxmox_base.sh"
 
 # Equips basats en templates (clons enllaçats), segons l'inventari
 deployed=()
@@ -18,7 +19,8 @@ done < "$EQUIPMENT_INVENTORY"
 
 boot_check_all "${deployed[@]}"
 
-# pve01 (Proxmox VE): procediment propi, s'afegirà en un pas posterior
+# pve01 (Proxmox VE): instal·lació desatesa pròpia, no parteix de cap template
+deploy_pve01
 
 log_info "=========================================="
 log_info "[+] Equips desplegats correctament."
