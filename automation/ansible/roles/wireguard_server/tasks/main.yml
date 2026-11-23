@@ -1,0 +1,135 @@
+---
+# Configura el servidor WireGuard a mikrotik0 (RouterOS 7) de manera
+# idempotent: cada objecte es compta abans de crear-lo i només s'afegeix
+# si no existeix.
+
+# ---------------------------------------------------------
+# Interfície i adreça del túnel
+# ---------------------------------------------------------
+
+- name: Comprovar si existeix la interfície WireGuard
+  community.routeros.command:
+    commands:
+      - ':put [:len [/interface/wireguard/find where name="{{ wg_interface }}"]]'
+  register: wg_if
+  changed_when: false
+
+- name: Crear la interfície WireGuard (RouterOS en genera la clau privada)
+  community.routeros.command:
+    commands:
+      - '/interface/wireguard/add name="{{ wg_interface }}" listen-port={{ wg_listen_port }} comment="{{ wg_comment }}"'
+  when: wg_if.stdout[0] | trim == "0"
+  changed_when: true
+
+- name: Comprovar l'adreça del túnel
+  community.routeros.command:
+    commands:
+      - ':put [:len [/ip/address/find where interface="{{ wg_interface }}" and address="{{ wg_server_address }}"]]'
+  register: wg_addr
+  changed_when: false
+
+- name: Assignar l'adreça del túnel a la interfície
+  community.routeros.command:
+    commands:
+      - '/ip/address/add interface="{{ wg_interface }}" address={{ wg_server_address }} comment="{{ wg_comment }}"'
+  when: wg_addr.stdout[0] | trim == "0"
+  changed_when: true
+
+# ---------------------------------------------------------
+# Peer del client
+# ---------------------------------------------------------
+
+- name: Comprovar si el client ja està registrat amb la clau actual
+  community.routeros.command:
+    commands:
+      - ':put [:len [/interface/wireguard/peers/find where interface="{{ wg_interface }}" and public-key="{{ wg_client_public_key }}"]]'
+  register: wg_peer
+  changed_when: false
+
+- name: Registrar el client (substitueix un peer antic del mateix client)
+  community.routeros.command:
+    commands:
+      - '/interface/wireguard/peers/remove [find where comment="{{ wg_comment }} {{ wg_client.name }}"]'
+      - '/interface/wireguard/peers/add interface="{{ wg_interface }}" public-key="{{ wg_client_public_key }}" allowed-address={{ wg_client.address }} comment="{{ wg_comment }} {{ wg_client.name }}"'
+  when: wg_peer.stdout[0] | trim == "0"
+  changed_when: true
+
+# ---------------------------------------------------------
+# Xarxes autoritzades (llista d'adreces)
+# ---------------------------------------------------------
+
+- name: Comprovar les xarxes autoritzades a la llista d'adreces
+  community.routeros.command:
+    commands:
+      - ':put [:len [/ip/firewall/address-list/find where list="{{ wg_address_list }}" and address="{{ item }}"]]'
+  loop: "{{ wg_allowed_networks }}"
+  register: wg_list
+  changed_when: false
+
+- name: Afegir les xarxes autoritzades que falten
+  community.routeros.command:
+    commands:
+      - '/ip/firewall/address-list/add list="{{ wg_address_list }}" address={{ item.item }} comment="{{ wg_comment }}"'
+  loop: "{{ wg_list.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stdout[0] | trim == "0"
+  changed_when: true
+
+# ---------------------------------------------------------
+# Tallafoc: entrada del port UDP i reenviament de la VPN
+# ---------------------------------------------------------
+
+- name: Comprovar la regla d'entrada del port de WireGuard
+  community.routeros.command:
+    commands:
+      - ':put [:len [/ip/firewall/filter/find where comment="{{ wg_input_comment }}"]]'
+  register: wg_input
+  changed_when: false
+
+# Es col·loca abans de la primera regla existent perquè cap regla de
+# descart pugui aturar el trànsit de WireGuard
+- name: Obrir el port UDP de WireGuard a la cadena input
+  community.routeros.command:
+    commands:
+      - >-
+        { :local first [:pick [/ip/firewall/filter/find] 0];
+        :if ([:len $first] > 0) do={ /ip/firewall/filter/add {{ wg_input_params }} place-before=$first }
+        else={ /ip/firewall/filter/add {{ wg_input_params }} } }
+  when: wg_input.stdout[0] | trim == "0"
+  changed_when: true
+
+- name: Comprovar les regles de reenviament de la VPN
+  community.routeros.command:
+    commands:
+      - ':put [:len [/ip/firewall/filter/find where comment="{{ item.comment }}"]]'
+  loop: "{{ wg_forward_rules }}"
+  loop_control:
+    label: "{{ item.comment }}"
+  register: wg_forward
+  changed_when: false
+
+- name: Afegir les regles de reenviament que falten
+  community.routeros.command:
+    commands:
+      - '/ip/firewall/filter/add {{ item.item.params }} comment="{{ item.item.comment }}"'
+  loop: "{{ wg_forward.results }}"
+  loop_control:
+    label: "{{ item.item.comment }}"
+  when: item.stdout[0] | trim == "0"
+  changed_when: true
+
+# ---------------------------------------------------------
+# Clau pública del servidor (per al fitxer del client)
+# ---------------------------------------------------------
+
+- name: Llegir la clau pública del servidor
+  community.routeros.command:
+    commands:
+      - ':put [/interface/wireguard/get [find where name="{{ wg_interface }}"] public-key]'
+  register: wg_server_pub
+  changed_when: false
+
+- name: Desar la clau pública del servidor
+  ansible.builtin.set_fact:
+    wg_server_public_key: "{{ wg_server_pub.stdout[0] | trim }}"

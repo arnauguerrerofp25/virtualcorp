@@ -1,0 +1,14 @@
+# Regles de la cadena forward per a la VPN, en ordre d'aplicació.
+# El comentari identifica cada regla per no duplicar-la.
+wg_forward_rules:
+  - comment: "{{ wg_comment }}: forward respostes"
+    params: "chain=forward action=accept connection-state=established,related"
+  - comment: "{{ wg_comment }}: forward VPN cap a xarxes autoritzades"
+    params: "chain=forward action=accept in-interface={{ wg_interface }} dst-address-list={{ wg_address_list }}"
+  - comment: "{{ wg_comment }}: forward resta de la VPN descartada"
+    params: "chain=forward action=drop in-interface={{ wg_interface }}"
+
+wg_input_comment: "{{ wg_comment }}: entrada WireGuard"
+wg_input_params: >-
+  chain=input action=accept protocol=udp dst-port={{ wg_listen_port }}
+  in-interface={{ wg_wan_interface }} comment="{{ wg_input_comment }}"
