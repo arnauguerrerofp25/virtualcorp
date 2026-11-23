@@ -1,0 +1,26 @@
+# Valors no secrets de la VPN WireGuard (activitat 3)
+wg_router_vm: mikrotik0
+wg_interface: wg-vpn
+wg_listen_port: 51820
+wg_tunnel_network: 10.9.10.0/24
+wg_server_address: 10.9.10.1/24
+wg_wan_interface: ether1          # NIC1 de mikrotik0 (NAT de VirtualBox)
+wg_comment: vcorp-wg
+
+# Xarxes autoritzades per a l'accés de la VPN (administració del CPD)
+wg_address_list: vcorp-wg-permeses
+wg_allowed_networks:
+  - 10.9.0.128/26                 # privada: pve01, dbsrv, infosrv
+  - 10.9.0.192/27                 # dmz: websrv
+  - 10.9.0.224/28                 # enllaços entre routers
+
+# Reenviament UDP de VirtualBox i endpoint del client (mateix ordinador)
+wg_forward_host_ip: 127.0.0.1
+wg_endpoint_host: 127.0.0.1
+
+wg_client:
+  name: arnau-portatil
+  address: 10.9.10.2/32
+
+# Claus i fitxer del client: fora de Git (artifacts/ és ignorat)
+wg_vpn_dir: "{{ playbook_dir }}/../../../artifacts/vpn"
