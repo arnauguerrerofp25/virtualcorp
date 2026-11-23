@@ -1,0 +1,23 @@
+---
+- name: Crear el directori local de la VPN (fora de Git)
+  ansible.builtin.file:
+    path: "{{ wg_vpn_dir }}"
+    state: directory
+    mode: "0700"
+
+- name: Generar la clau privada del client si no existeix
+  ansible.builtin.shell:
+    cmd: "umask 077 && wg genkey > {{ wg_client_key_file | quote }}"
+    creates: "{{ wg_client_key_file }}"
+  no_log: true
+
+- name: Derivar la clau pública del client
+  ansible.builtin.shell:
+    cmd: "wg pubkey < {{ wg_client_key_file | quote }}"
+  register: wg_client_pub
+  changed_when: false
+  no_log: true
+
+- name: Desar la clau pública del client
+  ansible.builtin.set_fact:
+    wg_client_public_key: "{{ wg_client_pub.stdout | trim }}"

@@ -1,0 +1,10 @@
+# Generat per Ansible. Conté una clau privada: no el versioneu.
+[Interface]
+PrivateKey = {{ lookup('ansible.builtin.file', wg_client_key_file) }}
+Address = {{ wg_client.address }}
+
+[Peer]
+PublicKey = {{ wg_server_public_key }}
+Endpoint = {{ wg_endpoint_host }}:{{ wg_listen_port }}
+AllowedIPs = {{ ([wg_tunnel_network] + wg_allowed_networks) | join(', ') }}
+PersistentKeepalive = 25

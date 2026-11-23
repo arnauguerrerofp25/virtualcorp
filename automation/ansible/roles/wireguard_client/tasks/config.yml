@@ -1,0 +1,7 @@
+---
+- name: Escriure el fitxer de configuració del client
+  ansible.builtin.template:
+    src: client.conf.j2
+    dest: "{{ wg_vpn_dir }}/{{ wg_client.name }}.conf"
+    mode: "0600"
+  no_log: true
