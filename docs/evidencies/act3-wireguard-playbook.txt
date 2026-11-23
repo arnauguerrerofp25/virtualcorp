@@ -1,0 +1,194 @@
+# Activitat 3 - Execució de configure_wireguard.yml
+# 2026-11-23 18:42
+
+================ 1a execució ================
+
+PLAY [Claus del client WireGuard (node de control)] ****************************
+
+TASK [wireguard_client : Crear el directori local de la VPN (fora de Git)] *****
+[WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.19/reference_appendices/interpreter_discovery.html for more information.
+changed: [localhost]
+
+TASK [wireguard_client : Generar la clau privada del client si no existeix] ****
+changed: [localhost]
+
+TASK [wireguard_client : Derivar la clau pública del client] *******************
+ok: [localhost]
+
+TASK [wireguard_client : Desar la clau pública del client] *********************
+ok: [localhost]
+
+PLAY [Servidor WireGuard a mikrotik0] ******************************************
+
+TASK [wireguard_server : Comprovar si existeix la interfície WireGuard] ********
+[WARNING]: ansible-pylibssh not installed, falling back to paramiko
+[WARNING]: Deprecation warnings can be disabled by setting `deprecation_warnings=False` in ansible.cfg.
+[DEPRECATION WARNING]: The paramiko connection plugin is deprecated. This feature will be removed from ansible-core version 2.21.
+ok: [mikrotik0]
+
+TASK [wireguard_server : Crear la interfície WireGuard (RouterOS en genera la clau privada)] ***
+changed: [mikrotik0]
+
+TASK [wireguard_server : Comprovar l'adreça del túnel] *************************
+ok: [mikrotik0]
+
+TASK [wireguard_server : Assignar l'adreça del túnel a la interfície] **********
+changed: [mikrotik0]
+
+TASK [wireguard_server : Comprovar si el client ja està registrat amb la clau actual] ***
+ok: [mikrotik0]
+
+TASK [wireguard_server : Registrar el client (substitueix un peer antic del mateix client)] ***
+changed: [mikrotik0]
+
+TASK [wireguard_server : Comprovar les xarxes autoritzades a la llista d'adreces] ***
+ok: [mikrotik0] => (item=10.9.0.128/26)
+ok: [mikrotik0] => (item=10.9.0.192/27)
+ok: [mikrotik0] => (item=10.9.0.224/28)
+
+TASK [wireguard_server : Afegir les xarxes autoritzades que falten] ************
+changed: [mikrotik0] => (item=10.9.0.128/26)
+changed: [mikrotik0] => (item=10.9.0.192/27)
+changed: [mikrotik0] => (item=10.9.0.224/28)
+
+TASK [wireguard_server : Comprovar la regla d'entrada del port de WireGuard] ***
+ok: [mikrotik0]
+
+TASK [wireguard_server : Obrir el port UDP de WireGuard a la cadena input] *****
+changed: [mikrotik0]
+
+TASK [wireguard_server : Comprovar les regles de reenviament de la VPN] ********
+ok: [mikrotik0] => (item=vcorp-wg: forward respostes)
+ok: [mikrotik0] => (item=vcorp-wg: forward VPN cap a xarxes autoritzades)
+ok: [mikrotik0] => (item=vcorp-wg: forward resta de la VPN descartada)
+
+TASK [wireguard_server : Afegir les regles de reenviament que falten] **********
+changed: [mikrotik0] => (item=vcorp-wg: forward respostes)
+changed: [mikrotik0] => (item=vcorp-wg: forward VPN cap a xarxes autoritzades)
+changed: [mikrotik0] => (item=vcorp-wg: forward resta de la VPN descartada)
+
+TASK [wireguard_server : Llegir la clau pública del servidor] ******************
+ok: [mikrotik0]
+
+TASK [wireguard_server : Desar la clau pública del servidor] *******************
+ok: [mikrotik0]
+
+PLAY [Reenviament UDP i fitxer del client (node de control)] *******************
+
+TASK [Reenviar el port UDP de WireGuard cap a mikrotik0] ***********************
+included: vbox_nat_forward for localhost
+
+TASK [vbox_nat_forward : Consultar la configuració de la màquina virtual] ******
+ok: [localhost]
+
+TASK [vbox_nat_forward : Afegir la regla de reenviament si no existeix] ********
+changed: [localhost]
+
+TASK [Generar el fitxer del client] ********************************************
+included: wireguard_client for localhost
+
+TASK [wireguard_client : Escriure el fitxer de configuració del client] ********
+changed: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=9    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+mikrotik0                  : ok=14   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+EXIT=0
+
+================ 2a execució (idempotència) ================
+
+PLAY [Claus del client WireGuard (node de control)] ****************************
+
+TASK [wireguard_client : Crear el directori local de la VPN (fora de Git)] *****
+[WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.19/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [wireguard_client : Generar la clau privada del client si no existeix] ****
+ok: [localhost]
+
+TASK [wireguard_client : Derivar la clau pública del client] *******************
+ok: [localhost]
+
+TASK [wireguard_client : Desar la clau pública del client] *********************
+ok: [localhost]
+
+PLAY [Servidor WireGuard a mikrotik0] ******************************************
+
+TASK [wireguard_server : Comprovar si existeix la interfície WireGuard] ********
+[WARNING]: ansible-pylibssh not installed, falling back to paramiko
+[WARNING]: Deprecation warnings can be disabled by setting `deprecation_warnings=False` in ansible.cfg.
+[DEPRECATION WARNING]: The paramiko connection plugin is deprecated. This feature will be removed from ansible-core version 2.21.
+ok: [mikrotik0]
+
+TASK [wireguard_server : Crear la interfície WireGuard (RouterOS en genera la clau privada)] ***
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Comprovar l'adreça del túnel] *************************
+ok: [mikrotik0]
+
+TASK [wireguard_server : Assignar l'adreça del túnel a la interfície] **********
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Comprovar si el client ja està registrat amb la clau actual] ***
+ok: [mikrotik0]
+
+TASK [wireguard_server : Registrar el client (substitueix un peer antic del mateix client)] ***
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Comprovar les xarxes autoritzades a la llista d'adreces] ***
+ok: [mikrotik0] => (item=10.9.0.128/26)
+ok: [mikrotik0] => (item=10.9.0.192/27)
+ok: [mikrotik0] => (item=10.9.0.224/28)
+
+TASK [wireguard_server : Afegir les xarxes autoritzades que falten] ************
+skipping: [mikrotik0] => (item=10.9.0.128/26) 
+skipping: [mikrotik0] => (item=10.9.0.192/27) 
+skipping: [mikrotik0] => (item=10.9.0.224/28) 
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Comprovar la regla d'entrada del port de WireGuard] ***
+ok: [mikrotik0]
+
+TASK [wireguard_server : Obrir el port UDP de WireGuard a la cadena input] *****
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Comprovar les regles de reenviament de la VPN] ********
+ok: [mikrotik0] => (item=vcorp-wg: forward respostes)
+ok: [mikrotik0] => (item=vcorp-wg: forward VPN cap a xarxes autoritzades)
+ok: [mikrotik0] => (item=vcorp-wg: forward resta de la VPN descartada)
+
+TASK [wireguard_server : Afegir les regles de reenviament que falten] **********
+skipping: [mikrotik0] => (item=vcorp-wg: forward respostes) 
+skipping: [mikrotik0] => (item=vcorp-wg: forward VPN cap a xarxes autoritzades) 
+skipping: [mikrotik0] => (item=vcorp-wg: forward resta de la VPN descartada) 
+skipping: [mikrotik0]
+
+TASK [wireguard_server : Llegir la clau pública del servidor] ******************
+ok: [mikrotik0]
+
+TASK [wireguard_server : Desar la clau pública del servidor] *******************
+ok: [mikrotik0]
+
+PLAY [Reenviament UDP i fitxer del client (node de control)] *******************
+
+TASK [Reenviar el port UDP de WireGuard cap a mikrotik0] ***********************
+included: vbox_nat_forward for localhost
+
+TASK [vbox_nat_forward : Consultar la configuració de la màquina virtual] ******
+ok: [localhost]
+
+TASK [vbox_nat_forward : Afegir la regla de reenviament si no existeix] ********
+skipping: [localhost]
+
+TASK [Generar el fitxer del client] ********************************************
+included: wireguard_client for localhost
+
+TASK [wireguard_client : Escriure el fitxer de configuració del client] ********
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=8    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+mikrotik0                  : ok=8    changed=0    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+
+EXIT=0
