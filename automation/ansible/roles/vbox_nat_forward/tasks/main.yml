@@ -1,0 +1,17 @@
+---
+- name: Consultar la configuració de la màquina virtual
+  ansible.builtin.command:
+    argv: ["{{ vboxmanage_bin }}", showvminfo, "{{ vm_name }}", --machinereadable]
+  register: vm_info
+  changed_when: false
+
+- name: Afegir la regla de reenviament si no existeix
+  ansible.builtin.command:
+    argv:
+      - "{{ vboxmanage_bin }}"
+      - "{{ 'controlvm' if 'VMState=\"running\"' in vm_info.stdout else 'modifyvm' }}"
+      - "{{ vm_name }}"
+      - "{{ 'natpf1' if 'VMState=\"running\"' in vm_info.stdout else '--natpf1' }}"
+      - "{{ nat_rule_name }},{{ nat_protocol }},{{ nat_host_ip }},{{ nat_host_port }},,{{ nat_guest_port }}"
+  when: "('=\"' ~ nat_rule_name ~ ',') not in vm_info.stdout"
+  changed_when: true

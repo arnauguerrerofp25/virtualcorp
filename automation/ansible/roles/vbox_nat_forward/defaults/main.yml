@@ -1,0 +1,7 @@
+vboxmanage_bin: VBoxManage
+vm_name: ""
+nat_rule_name: ""
+nat_protocol: udp
+nat_host_ip: 127.0.0.1
+nat_host_port: 0
+nat_guest_port: 0
