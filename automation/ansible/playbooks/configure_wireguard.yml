@@ -1,0 +1,35 @@
+---
+- name: Claus del client WireGuard (node de control)
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - wireguard_client
+
+- name: Servidor WireGuard a mikrotik0
+  hosts: mikrotik0
+  gather_facts: false
+  roles:
+    - role: wireguard_server
+      vars:
+        wg_client_public_key: "{{ hostvars['localhost']['wg_client_public_key'] }}"
+
+- name: Reenviament UDP i fitxer del client (node de control)
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Reenviar el port UDP de WireGuard cap a mikrotik0
+      ansible.builtin.include_role:
+        name: vbox_nat_forward
+      vars:
+        vm_name: "{{ wg_router_vm }}"
+        nat_rule_name: wireguard
+        nat_host_ip: "{{ wg_forward_host_ip }}"
+        nat_host_port: "{{ wg_listen_port }}"
+        nat_guest_port: "{{ wg_listen_port }}"
+
+    - name: Generar el fitxer del client
+      ansible.builtin.include_role:
+        name: wireguard_client
+        tasks_from: config
+      vars:
+        wg_server_public_key: "{{ hostvars['mikrotik0']['wg_server_public_key'] }}"
