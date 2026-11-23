@@ -1,0 +1,89 @@
+# Activitat 3 - Proves de la VPN WireGuard (apartat 3.4)
+# 2026-11-23 18:45 · client: interfície arnau-portatil (10.9.10.2), mateix ordinador que VirtualBox
+
+================ 1. Estat del peer a RouterOS (mikrotik0) ================
+Flags: X - disabled; D - dynamic 
+ 0    ;;; vcorp-wg arnau-portatil
+      interface=wg-vpn name="peer1" 
+      public-key="…" 
+      endpoint-address="" endpoint-port=0 current-endpoint-address=10.0.2.2 
+      current-endpoint-port=42649 allowed-address=10.9.10.2/32 
+      client-endpoint="" client-allowed-address="" rx=212 tx=92 
+      last-handshake=29s 
+
+
+================ 2. Rutes del client cap a VirtualCorp ================
+10.9.0.128/26 scope link 
+10.9.0.192/27 scope link 
+10.9.0.224/28 scope link 
+10.9.10.0/24 scope link 
+
+================ 3. Xarxes autoritzades (han de respondre) ================
+ping 10.9.10.1    OK
+ping 10.9.0.193   OK
+ping 10.9.0.129   OK
+ping 10.9.0.225   OK
+ping 10.9.0.226   OK
+ping 10.9.0.230   OK
+ping 10.9.0.234   OK
+
+================ 4. Xarxes NO autoritzades (no han de respondre) ================
+ping 10.9.0.1     sense resposta · ruta: 10.9.0.1 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+ping 10.9.1.1     sense resposta · ruta: 10.9.1.1 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+ping 10.9.2.1     sense resposta · ruta: 10.9.2.1 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+ping 10.9.3.1     sense resposta · ruta: 10.9.3.1 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+ping 10.9.3.129   sense resposta · ruta: 10.9.3.129 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+
+================ 5. Túnel dividit: Internet surt directament (no per la VPN) ================
+ip route get 1.1.1.1 → 1.1.1.1 via 10.112.153.205 dev wlp0s20f3 src 10.112.153.132 uid 1000 
+ping 1.1.1.1: OK
+consulta DNS github.com: OK
+xarxa local del client (Wi-Fi): 10.112.153.132/24 · no se superposa amb 10.9.10.0/24
+
+================ 6. Comptadors de les regles forward de mikrotik0 ================
+Columns: CHAIN, ACTION, BYTES, PACKETS
+# CHAIN    ACTION  BYTES  PACKETS
+;;; vcorp-wg: forward respostes
+0 forward  accept    756        9
+;;; vcorp-wg: forward VPN cap a xarxes autoritzades
+1 forward  accept    252        3
+;;; vcorp-wg: forward resta de la VPN descartada
+2 forward  drop        0        0
+
+
+================ 7. Filtrat al servidor: client modificat per enviar pl0 i direcció pel túnel ================
+# Prova temporal: s'han afegit 10.9.0.0/25 i 10.9.3.128/25 a l'AllowedIPs del client i les rutes corresponents.
+# El trànsit arriba a mikrotik0 pel túnel i l'ha de descartar la regla forward.
+descartats abans: 0
+ping 10.9.0.1    ruta: 10.9.0.1 dev arnau-portatil              sense resposta
+ping 10.9.3.129  ruta: 10.9.3.129 dev arnau-portatil            sense resposta
+descartats despres: 6
+
+================ 8. Túnel desactivat i reactivat (wg-quick down / up) ================
+Rutes del client (han de tornar a ser només les 4 autoritzades):
+10.9.0.128/26 scope link 
+10.9.0.192/27 scope link 
+10.9.0.224/28 scope link 
+10.9.10.0/24 scope link 
+last-handshake: 00:00:35
+
+================ 9. Accés a pve01 (zona privada) a través de la VPN ================
+ping 10.9.0.133: OK
+ssh root@10.9.0.133 (directe pel túnel, sense salt per mikrotik0):
+pve01.virtualcorp.lan
+pve-manager/9.2.2/b9984c6d90a4bd80 (running kernel: 7.0.2-6-pve)
+connexió SSH des de: 10.9.10.2
+10.9.10.2 via 10.9.0.129 dev vmbr0 src 10.9.0.133 uid 0 
+
+================ 10. Persistència: després de reiniciar mikrotik0 ================
+uptime: 00:00:54
+interficie wg-vpn: 1  listen-port 51820
+adreca tunel: 1
+peers: 1
+xarxes autoritzades: 3
+regles vcorp-wg: 4
+last-handshake: 00:00:40
+ping 10.9.0.133 (pve01) pel túnel: OK
+ruta RIP a mikrotik1: gateway=10.9.0.225%ether2
+ruta RIP a mikrotik2: gateway=10.9.0.229%ether2
+ruta RIP a mikrotik3: gateway=10.9.0.233%ether2
