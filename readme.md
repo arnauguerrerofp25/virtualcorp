@@ -55,3 +55,14 @@ ping 1.1.1.1 count=4
 ```
 
 The lab is ready when all four routers can reach one another and each can reach the internet.
+
+### 5. Automate with Ansible (activity 3)
+
+The Ansible inventory, roles and playbooks live in `automation/ansible`. They start and stop the routers and configure the WireGuard VPN on `mikrotik0`. See [automation/ansible/README.md](automation/ansible/README.md) for the requirements, the VPN addressing and the tests.
+
+```bash
+cd automation/ansible
+ansible-playbook playbooks/start_routers.yml
+ansible-playbook playbooks/configure_wireguard.yml
+ansible-playbook playbooks/stop_routers.yml
+```
