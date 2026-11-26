@@ -1,0 +1,40 @@
+---
+# Configura els relays DHCP de RouterOS. Per a cada relay de dhcp_relays
+# es llegeix l'estat actual i només s'escriu si cal: crear-lo, corregir-lo
+# o activar-lo. Un relay correcte i actiu no es modifica.
+
+- name: Llegir l'estat actual dels relays
+  community.routeros.command:
+    commands:
+      - >-
+        { :local id [/ip/dhcp-relay/find where name="{{ item.name }}"];
+        :if ([:len $id] = 0) do={ :put "absent" } else={
+        :put ([/ip/dhcp-relay/get $id interface] . "|" . [/ip/dhcp-relay/get $id dhcp-server]
+        . "|" . [/ip/dhcp-relay/get $id local-address] . "|" . [/ip/dhcp-relay/get $id disabled]) } }
+  loop: "{{ dhcp_relays }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: dhcp_relay_state
+  changed_when: false
+
+- name: Crear els relays que no existeixen
+  community.routeros.command:
+    commands:
+      - '/ip/dhcp-relay/add name="{{ item.item.name }}" interface={{ item.item.interface }} dhcp-server={{ dhcp_relay_server }} local-address={{ item.item.local_address }} disabled=no'
+  loop: "{{ dhcp_relay_state.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+  when: item.stdout[0] | trim == "absent"
+  changed_when: true
+
+- name: Corregir o activar els relays que tenen valors diferents
+  vars:
+    dhcp_relay_desired: "{{ item.item.interface }}|{{ dhcp_relay_server }}|{{ item.item.local_address }}|false"
+  community.routeros.command:
+    commands:
+      - '/ip/dhcp-relay/set [find where name="{{ item.item.name }}"] interface={{ item.item.interface }} dhcp-server={{ dhcp_relay_server }} local-address={{ item.item.local_address }} disabled=no'
+  loop: "{{ dhcp_relay_state.results }}"
+  loop_control:
+    label: "{{ item.item.name }}: {{ item.stdout[0] | trim }}"
+  when: (item.stdout[0] | trim) not in ["absent", dhcp_relay_desired]
+  changed_when: true
