@@ -8,15 +8,15 @@
 
 - name: Llegir les reserves del pla d'adreçament
   ansible.builtin.set_fact:
-    kea_reservations: >-
-      {{ lookup('ansible.builtin.file', kea_address_plan).splitlines()
-         | reject('match', '^#') | join('\n')
-         | community.general.from_csv(dialect='excel-tab')
-         | selectattr('tipus', 'equalto', 'reserva') | list }}
+    kea_reservations: "{{ lookup('ansible.builtin.file', kea_address_plan).splitlines()
+      | reject('match', '^#') | join('\n')
+      | community.general.from_csv(dialect='excel-tab')
+      | selectattr('tipus', 'equalto', 'reserva') | list }}"
 
 - name: Comprovar que no hi ha IP ni MAC reservades repetides
   ansible.builtin.assert:
     that:
+      - kea_reservations | length > 0
       - kea_reservations | map(attribute='ip') | unique | length == kea_reservations | length
       - kea_reservations | map(attribute='mac') | unique | length == kea_reservations | length
     fail_msg: "Hi ha IP o MAC repetides a {{ kea_address_plan }}"
