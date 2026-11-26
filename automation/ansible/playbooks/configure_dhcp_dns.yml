@@ -4,3 +4,9 @@
   gather_facts: false
   roles:
     - kea_dhcp
+
+- name: Relays DHCP als routers RouterOS
+  hosts: routeros
+  gather_facts: false
+  roles:
+    - dhcp_relay
