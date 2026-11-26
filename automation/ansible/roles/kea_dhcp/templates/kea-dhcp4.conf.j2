@@ -1,0 +1,53 @@
+// Generat per Ansible (rol kea_dhcp). No l'editeu a mà.
+// Àmbits: inventories/group_vars/dhcp/kea.yml · Reserves: configs/address-plan.tsv
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [ "{{ kea_interface }}" ]
+    },
+
+    "lease-database": {
+      "type": "memfile",
+      "persist": true,
+      "name": "/var/lib/kea/kea-leases4.csv",
+      "lfc-interval": 3600
+    },
+
+    "valid-lifetime": {{ kea_valid_lifetime }},
+    "renew-timer": {{ (kea_valid_lifetime / 2) | int }},
+    "rebind-timer": {{ (kea_valid_lifetime * 7 / 8) | int }},
+
+    // Opcions comunes a tots els àmbits
+    "option-data": [
+      { "name": "domain-name-servers", "data": "{{ kea_dns_servers | join(', ') }}" },
+      { "name": "domain-name", "data": "{{ kea_domain }}" }
+    ],
+
+    "subnet4": [
+{% for s in kea_subnets %}
+      {
+        "id": {{ s.id }},
+        "subnet": "{{ s.subnet }}",
+        "user-context": { "name": "{{ s.name }}" },
+        "pools": [ { "pool": "{{ s.pool }}" } ],
+        "option-data": [
+          { "name": "routers", "data": "{{ s.router }}" }
+        ],
+        "reservations": [
+{% for r in kea_reservations | selectattr('segment', 'equalto', s.name) %}
+          { "hw-address": "{{ r.mac }}", "ip-address": "{{ r.ip }}", "hostname": "{{ r.nom }}" }{{ ',' if not loop.last }}
+{% endfor %}
+        ]
+      }{{ ',' if not loop.last }}
+{% endfor %}
+    ],
+
+    "loggers": [
+      {
+        "name": "kea-dhcp4",
+        "output-options": [ { "output": "/var/log/kea/kea-dhcp4.log" } ],
+        "severity": "INFO"
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+---
+- name: Instal·lar el servidor Kea DHCPv4 (paquets de Debian)
+  ansible.builtin.apt:
+    name: kea-dhcp4-server
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Llegir les reserves del pla d'adreçament
+  ansible.builtin.set_fact:
+    kea_reservations: >-
+      {{ lookup('ansible.builtin.file', kea_address_plan).splitlines()
+         | reject('match', '^#') | join('\n')
+         | community.general.from_csv(dialect='excel-tab')
+         | selectattr('tipus', 'equalto', 'reserva') | list }}
+
+- name: Comprovar que no hi ha IP ni MAC reservades repetides
+  ansible.builtin.assert:
+    that:
+      - kea_reservations | map(attribute='ip') | unique | length == kea_reservations | length
+      - kea_reservations | map(attribute='mac') | unique | length == kea_reservations | length
+    fail_msg: "Hi ha IP o MAC repetides a {{ kea_address_plan }}"
+    quiet: true
+
+- name: Comprovar que cada reserva és dins del seu àmbit i fora del pool
+  vars:
+    kea_subnet: "{{ kea_subnets | selectattr('name', 'equalto', item.segment) | first }}"
+    kea_ip: "{{ item.ip | ansible.utils.ipaddr('int') | int }}"
+    kea_pool_first: "{{ kea_subnet.pool.split('-')[0] | trim | ansible.utils.ipaddr('int') | int }}"
+    kea_pool_last: "{{ kea_subnet.pool.split('-')[1] | trim | ansible.utils.ipaddr('int') | int }}"
+  ansible.builtin.assert:
+    that:
+      - item.ip | ansible.utils.ipaddr(kea_subnet.subnet) == item.ip
+      - kea_ip | int < kea_pool_first | int or kea_ip | int > kea_pool_last | int
+    fail_msg: "La reserva de {{ item.nom }} ({{ item.ip }}) no és vàlida per a l'àmbit {{ item.segment }}"
+    quiet: true
+  loop: "{{ kea_reservations }}"
+  loop_control:
+    label: "{{ item.nom }} {{ item.ip }}"
+
+# La plantilla es valida amb kea-dhcp4 -t abans d'instal·lar-la: un fitxer
+# incorrecte no substitueix mai la configuració en servei.
+- name: Generar la configuració de Kea
+  ansible.builtin.template:
+    src: kea-dhcp4.conf.j2
+    dest: /etc/kea/kea-dhcp4.conf
+    owner: root
+    group: _kea
+    mode: "0640"
+    validate: kea-dhcp4 -t %s
+  notify: Reiniciar Kea
+
+- name: Habilitar i iniciar Kea
+  ansible.builtin.systemd_service:
+    name: kea-dhcp4-server
+    enabled: true
+    state: started
