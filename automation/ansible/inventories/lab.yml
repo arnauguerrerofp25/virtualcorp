@@ -20,3 +20,9 @@ all:
           # Usuari sysadmin; +cet512w evita que RouterOS talli les línies llargues
           ansible_user: sysadmin+cet512w
           ansible_ssh_private_key_file: ~/.ssh/vcorp_sysadmin
+    dhcp:
+      hosts:
+        dhcp01:
+          ansible_host: 10.9.0.136
+          ansible_user: root
+          ansible_ssh_private_key_file: ~/.ssh/vcorp_sysadmin
