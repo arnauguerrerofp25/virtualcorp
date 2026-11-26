@@ -1,0 +1,101 @@
+# Activitat 4 - Proves de clients DHCP (una VM cada vegada)
+# 2026-11-26 17:25 · servidor Kea 10.9.0.136 · accés als clients: SSH amb salt per mikrotik0
+
+================ websrv · MAC 08:00:27:72:ce:b8 · esperat: reserva 10.9.0.197 (dmz) ================
+  lease de Kea: ip=10.9.0.197 subnet-id=1 lifetime=3600s hostname=websrv
+  hostname: debian-server
+  adreça:   10.9.0.197/27
+  ruta:     default via 10.9.0.193 dev enp0s3 proto dhcp src 10.9.0.197 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+  -- reinici de websrv (nova petició DHCP)
+  després del reinici: ip=10.9.0.197 (mateixa MAC 08:00:27:72:ce:b8)
+
+================ dbsrv · MAC 08:00:27:1e:26:e9 · esperat: reserva 10.9.0.134 (privada) ================
+  lease de Kea: ip=10.9.0.134 subnet-id=2 lifetime=3600s hostname=dbsrv
+  hostname: debian-server
+  adreça:   10.9.0.134/26
+  ruta:     default via 10.9.0.129 dev enp0s3 proto dhcp src 10.9.0.134 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ printer0 · MAC 08:00:27:ff:2b:3f · esperat: reserva 10.9.0.65 (planta00) ================
+  lease de Kea: ip=10.9.0.65 subnet-id=3 lifetime=3600s hostname=printer0
+  hostname: debian-server
+  adreça:   10.9.0.65/25
+  ruta:     default via 10.9.0.1 dev enp0s3 proto dhcp src 10.9.0.65 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ pl1-pc01 · MAC 08:00:27:cd:6f:69 · esperat: pool 10.9.1.100-250 (planta01) ================
+  lease de Kea: ip=10.9.1.100 subnet-id=4 lifetime=3600s hostname=debian-desktop
+  hostname: debian-desktop
+  adreça:   10.9.1.100/24
+  ruta:     default via 10.9.1.1 dev enp0s3 proto dhcp src 10.9.1.100 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ pl2-pc01 · MAC 08:00:27:00:e1:c8 · esperat: pool 10.9.2.100-250 (planta02) ================
+  lease de Kea: ip=10.9.2.100 subnet-id=5 lifetime=3600s hostname=debian-desktop
+  hostname: debian-desktop
+  adreça:   10.9.2.100/24
+  ruta:     default via 10.9.2.1 dev enp0s3 proto dhcp src 10.9.2.100 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ pl3-pc01 · MAC 08:00:27:e5:94:ef · esperat: pool 10.9.3.70-126 (planta03) ================
+  lease de Kea: ip=10.9.3.70 subnet-id=6 lifetime=3600s hostname=debian-desktop
+  hostname: debian-desktop
+  adreça:   10.9.3.70/25
+  ruta:     default via 10.9.3.1 dev enp0s3 proto dhcp src 10.9.3.70 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ dir-pc01 · MAC 08:00:27:3f:f9:4c · esperat: pool 10.9.3.140-150 (direccio) ================
+  lease de Kea: ip=10.9.3.140 subnet-id=7 lifetime=3600s hostname=debian-desktop
+  hostname: debian-desktop
+  adreça:   10.9.3.140/25
+  ruta:     default via 10.9.3.129 dev enp0s3 proto dhcp src 10.9.3.140 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+
+================ prova-dhcp-dmz · MAC 08:00:27:19:64:b6 · esperat: pool 10.9.0.210-222 (dmz) · clon temporal ================
+  lease de Kea: ip=10.9.0.210 subnet-id=1 lifetime=3600s hostname=debian-server
+  hostname: debian-server
+  adreça:   10.9.0.210/27
+  ruta:     default via 10.9.0.193 dev enp0s3 proto dhcp src 10.9.0.210 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+  clon prova-dhcp-dmz esborrat
+
+================ prova-dhcp-privada · MAC 08:00:27:f0:a9:ab · esperat: pool 10.9.0.160-190 (privada) · clon temporal ================
+  lease de Kea: ip=10.9.0.160 subnet-id=2 lifetime=3600s hostname=debian-server
+  hostname: debian-server
+  adreça:   10.9.0.160/26
+  ruta:     default via 10.9.0.129 dev enp0s3 proto dhcp src 10.9.0.160 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+  clon prova-dhcp-privada esborrat
+
+================ prova-dhcp-pl0 · MAC 08:00:27:3d:e4:ab · esperat: pool 10.9.0.100-126 (planta00) · clon temporal ================
+  lease de Kea: ip=10.9.0.100 subnet-id=3 lifetime=3600s hostname=debian-server
+  hostname: debian-server
+  adreça:   10.9.0.100/25
+  ruta:     default via 10.9.0.1 dev enp0s3 proto dhcp src 10.9.0.100 metric 1002 
+  DNS:      10.9.0.137
+  domini:   virtualcorp.lan
+  clon prova-dhcp-pl0 esborrat
+
+================ Leases actius a Kea al final ================
+10.9.0.100 08:00:27:3d:e4:ab subnet 3 debian-server
+10.9.0.134 08:00:27:1e:26:e9 subnet 2 dbsrv
+10.9.0.160 08:00:27:f0:a9:ab subnet 2 debian-server
+10.9.0.197 08:00:27:72:ce:b8 subnet 1 websrv
+10.9.0.210 08:00:27:19:64:b6 subnet 1 debian-server
+10.9.0.65 08:00:27:ff:2b:3f subnet 3 printer0
+10.9.1.100 08:00:27:cd:6f:69 subnet 4 debian-desktop
+10.9.2.100 08:00:27:00:e1:c8 subnet 5 debian-desktop
+10.9.3.140 08:00:27:3f:f9:4c subnet 7 debian-desktop
+10.9.3.70 08:00:27:e5:94:ef subnet 6 debian-desktop
+
+FI 17:30
