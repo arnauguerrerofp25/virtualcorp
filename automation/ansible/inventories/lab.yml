@@ -10,16 +10,24 @@ all:
             - mikrotik1
             - mikrotik2
             - mikrotik3
-    routers:
+    routeros:
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_network_os: community.routeros.routeros
+        # Usuari sysadmin; +cet512w evita que RouterOS talli les línies llargues
+        ansible_user: sysadmin+cet512w
+        ansible_ssh_private_key_file: ~/.ssh/vcorp_sysadmin
       hosts:
         mikrotik0:
-          ansible_connection: ansible.netcommon.network_cli
-          ansible_network_os: community.routeros.routeros
           ansible_host: 127.0.0.1
           ansible_port: 2200
-          # Usuari sysadmin; +cet512w evita que RouterOS talli les línies llargues
-          ansible_user: sysadmin+cet512w
-          ansible_ssh_private_key_file: ~/.ssh/vcorp_sysadmin
+        # mikrotik1-3: a través del túnel WireGuard (enllaços 10.9.0.224/28 autoritzats)
+        mikrotik1:
+          ansible_host: 10.9.0.226
+        mikrotik2:
+          ansible_host: 10.9.0.230
+        mikrotik3:
+          ansible_host: 10.9.0.234
     dhcp:
       hosts:
         dhcp01:
