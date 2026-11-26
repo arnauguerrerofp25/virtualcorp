@@ -119,7 +119,9 @@ create_pve_vm() {
         --register >/dev/null || return 1
 
     # Una única interfície a la zona privada (cap NAT) i virtualització
-    # anidada activada abans de la primera arrencada.
+    # anidada activada abans de la primera arrencada. La NIC va en mode
+    # promiscu perquè els contenidors i VM de Proxmox surten pel bridge
+    # amb la seva pròpia MAC; si no, VirtualBox en descarta les trames.
     "$VBOXMANAGE_BIN" modifyvm "$PVE_NAME" \
         --groups "$PVE_GROUP" \
         --cpus "$PVE_CPUS" \
@@ -132,6 +134,7 @@ create_pve_vm() {
         --boot1 disk --boot2 dvd --boot3 none --boot4 none \
         --nic1 intnet \
         --intnet1 "$PVE_NETWORK" \
+        --nicpromisc1 allow-all \
         --cableconnected1 on \
         --description "Node Proxmox VE del CPD. IP fixa: ${PVE_IP}" || return 1
 
