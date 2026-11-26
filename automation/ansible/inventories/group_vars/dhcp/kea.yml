@@ -1,0 +1,16 @@
+# Àmbits DHCP de Kea (activitat 4). Les reserves no es repeteixen aquí:
+# es llegeixen de configs/address-plan.tsv (files de tipus "reserva").
+kea_interface: eth0
+kea_address_plan: "{{ playbook_dir }}/../../../configs/address-plan.tsv"
+kea_dns_servers: [10.9.0.137]      # dns01 (activitat següent)
+kea_domain: virtualcorp.lan
+kea_valid_lifetime: 3600
+
+kea_subnets:
+  - { id: 1, name: dmz,      subnet: 10.9.0.192/27, router: 10.9.0.193, pool: 10.9.0.210 - 10.9.0.222 }
+  - { id: 2, name: privada,  subnet: 10.9.0.128/26, router: 10.9.0.129, pool: 10.9.0.160 - 10.9.0.190 }
+  - { id: 3, name: planta00, subnet: 10.9.0.0/25,   router: 10.9.0.1,   pool: 10.9.0.100 - 10.9.0.126 }
+  - { id: 4, name: planta01, subnet: 10.9.1.0/24,   router: 10.9.1.1,   pool: 10.9.1.100 - 10.9.1.250 }
+  - { id: 5, name: planta02, subnet: 10.9.2.0/24,   router: 10.9.2.1,   pool: 10.9.2.100 - 10.9.2.250 }
+  - { id: 6, name: planta03, subnet: 10.9.3.0/25,   router: 10.9.3.1,   pool: 10.9.3.70 - 10.9.3.126 }
+  - { id: 7, name: direccio, subnet: 10.9.3.128/25, router: 10.9.3.129, pool: 10.9.3.140 - 10.9.3.150 }
