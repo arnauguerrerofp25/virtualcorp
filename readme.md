@@ -58,7 +58,7 @@ The lab is ready when all four routers can reach one another and each can reach 
 
 ### 5. Automate with Ansible (activity 3)
 
-The Ansible inventory, roles and playbooks live in `automation/ansible`. They start and stop the routers and configure the WireGuard VPN on `mikrotik0`. See [automation/ansible/README.md](automation/ansible/README.md) for the requirements, the VPN addressing and the tests.
+The Ansible inventory, roles and playbooks live in `automation/ansible`. They start and stop the routers and configure the WireGuard VPN on `mikrotik0`. See [docs/memoria-activitat3.md](docs/memoria-activitat3.md) for the requirements, the VPN addressing and the tests, and [docs/memoria-activitat4.md](docs/memoria-activitat4.md) for the DHCP service (Terraform, Kea and relays, `make deploy_dhcp`).
 
 ```bash
 cd automation/ansible
