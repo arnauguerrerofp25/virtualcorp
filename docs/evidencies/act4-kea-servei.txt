@@ -1,0 +1,24 @@
+# Activitat 4 - Estat del servei Kea a dhcp01
+# 2026-11-26 16:19 · 2.6.3 (tarball)
+
+== systemctl
+enabled
+active
+
+== escolta (UDP 67)
+UNCONN 0      0         10.9.0.136:67        0.0.0.0:*    users:(("kea-dhcp4",pid=881,fd=13))
+
+== validació de la configuració
+2026-11-26 16:19:22.016 INFO  [kea-dhcp4.dhcpsrv/995.134934037702592] DHCPSRV_CFGMGR_SOCKET_TYPE_DEFAULT "dhcp-socket-type" not specified , using default socket type raw
+
+== àmbits i reserves a la configuració
+àmbits: 7
+reserves: 13
+
+== log (inici i errors)
+2026-11-26 16:19:09.718 WARN  [kea-dhcp4.dhcpsrv/881.126550903420864] DHCPSRV_MT_DISABLED_QUEUE_CONTROL disabling dhcp queue control when multi-threading is enabled.
+2026-11-26 16:19:09.718 WARN  [kea-dhcp4.dhcp4/881.126550903420864] DHCP4_RESERVATIONS_LOOKUP_FIRST_ENABLED Multi-threading is enabled and host reservations lookup is always performed first.
+2026-11-26 16:19:09.718 INFO  [kea-dhcp4.dhcpsrv/881.126550903420864] DHCPSRV_CFGMGR_ADD_IFACE listening on interface eth0
+2026-11-26 16:19:09.718 INFO  [kea-dhcp4.dhcp4/881.126550903420864] DHCP4_CONFIG_COMPLETE DHCPv4 server has completed configuration: added IPv4 subnets: 7; DDNS: disabled
+2026-11-26 16:19:09.727 WARN  [kea-dhcp4.dhcp4/881.126550903420864] DHCP4_MULTI_THREADING_INFO enabled: yes, number of threads: 1, queue size: 64
+2026-11-26 16:19:09.727 INFO  [kea-dhcp4.dhcp4/881.126550903420864] DHCP4_STARTED Kea DHCPv4 server version 2.6.3 started

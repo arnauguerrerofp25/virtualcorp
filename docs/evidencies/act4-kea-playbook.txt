@@ -1,0 +1,116 @@
+# Activitat 4 - Execució de configure_dhcp_dns.yml (jugada de Kea)
+# 2026-11-26 17:14
+
+================ 1a execució ================
+
+PLAY [Servidor Kea DHCPv4] *****************************************************
+
+TASK [kea_dhcp : Instal·lar el servidor Kea DHCPv4 (paquets de Debian)] ********
+[WARNING]: Host 'dhcp01' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.19/reference_appendices/interpreter_discovery.html for more information.
+changed: [dhcp01]
+
+TASK [kea_dhcp : Llegir les reserves del pla d'adreçament] *********************
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que no hi ha IP ni MAC reservades repetides] ********
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que cada reserva és dins del seu àmbit i fora del pool] ***
+skipping: [dhcp01]
+
+TASK [kea_dhcp : Generar la configuració de Kea] *******************************
+changed: [dhcp01]
+
+TASK [kea_dhcp : Habilitar i iniciar Kea] **************************************
+ok: [dhcp01]
+
+RUNNING HANDLER [kea_dhcp : Reiniciar Kea] *************************************
+changed: [dhcp01]
+
+PLAY RECAP *********************************************************************
+dhcp01                     : ok=6    changed=3    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+
+EXIT=0
+
+================ 2a execució (després de corregir la lectura del pla, commit 2d31bee) ================
+
+PLAY [Servidor Kea DHCPv4] *****************************************************
+
+TASK [kea_dhcp : Instal·lar el servidor Kea DHCPv4 (paquets de Debian)] ********
+[WARNING]: Host 'dhcp01' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.19/reference_appendices/interpreter_discovery.html for more information.
+ok: [dhcp01]
+
+TASK [kea_dhcp : Llegir les reserves del pla d'adreçament] *********************
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que no hi ha IP ni MAC reservades repetides] ********
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que cada reserva és dins del seu àmbit i fora del pool] ***
+ok: [dhcp01] => (item=dbsrv 10.9.0.134)
+ok: [dhcp01] => (item=infosrv 10.9.0.135)
+ok: [dhcp01] => (item=websrv 10.9.0.197)
+ok: [dhcp01] => (item=printer0 10.9.0.65)
+ok: [dhcp01] => (item=expo1 10.9.0.33)
+ok: [dhcp01] => (item=expo2 10.9.0.34)
+ok: [dhcp01] => (item=expo3 10.9.0.35)
+ok: [dhcp01] => (item=expo4 10.9.0.36)
+ok: [dhcp01] => (item=conserge1 10.9.0.37)
+ok: [dhcp01] => (item=conserge2 10.9.0.38)
+ok: [dhcp01] => (item=printer1 10.9.1.65)
+ok: [dhcp01] => (item=printer2 10.9.2.65)
+ok: [dhcp01] => (item=printer3 10.9.3.65)
+
+TASK [kea_dhcp : Generar la configuració de Kea] *******************************
+changed: [dhcp01]
+
+TASK [kea_dhcp : Habilitar i iniciar Kea] **************************************
+ok: [dhcp01]
+
+RUNNING HANDLER [kea_dhcp : Reiniciar Kea] *************************************
+changed: [dhcp01]
+
+PLAY RECAP *********************************************************************
+dhcp01                     : ok=7    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+EXIT=0
+
+================ 3a execució (idempotència) ================
+
+PLAY [Servidor Kea DHCPv4] *****************************************************
+
+TASK [kea_dhcp : Instal·lar el servidor Kea DHCPv4 (paquets de Debian)] ********
+[WARNING]: Host 'dhcp01' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.19/reference_appendices/interpreter_discovery.html for more information.
+ok: [dhcp01]
+
+TASK [kea_dhcp : Llegir les reserves del pla d'adreçament] *********************
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que no hi ha IP ni MAC reservades repetides] ********
+ok: [dhcp01]
+
+TASK [kea_dhcp : Comprovar que cada reserva és dins del seu àmbit i fora del pool] ***
+ok: [dhcp01] => (item=dbsrv 10.9.0.134)
+ok: [dhcp01] => (item=infosrv 10.9.0.135)
+ok: [dhcp01] => (item=websrv 10.9.0.197)
+ok: [dhcp01] => (item=printer0 10.9.0.65)
+ok: [dhcp01] => (item=expo1 10.9.0.33)
+ok: [dhcp01] => (item=expo2 10.9.0.34)
+ok: [dhcp01] => (item=expo3 10.9.0.35)
+ok: [dhcp01] => (item=expo4 10.9.0.36)
+ok: [dhcp01] => (item=conserge1 10.9.0.37)
+ok: [dhcp01] => (item=conserge2 10.9.0.38)
+ok: [dhcp01] => (item=printer1 10.9.1.65)
+ok: [dhcp01] => (item=printer2 10.9.2.65)
+ok: [dhcp01] => (item=printer3 10.9.3.65)
+
+TASK [kea_dhcp : Generar la configuració de Kea] *******************************
+ok: [dhcp01]
+
+TASK [kea_dhcp : Habilitar i iniciar Kea] **************************************
+ok: [dhcp01]
+
+PLAY RECAP *********************************************************************
+dhcp01                     : ok=6    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+EXIT=0
