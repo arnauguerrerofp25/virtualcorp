@@ -1,0 +1,6 @@
+---
+- name: Servidor Kea DHCPv4
+  hosts: dhcp
+  gather_facts: false
+  roles:
+    - kea_dhcp
