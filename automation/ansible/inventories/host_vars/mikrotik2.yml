@@ -1,0 +1,4 @@
+# Relays DHCP de mikrotik2: un per interfície de LAN amb clients
+dhcp_relays:
+  - { name: vcorp-planta01, interface: ether4, local_address: 10.9.1.1 }
+  - { name: vcorp-planta02, interface: ether5, local_address: 10.9.2.1 }

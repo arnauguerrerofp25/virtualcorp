@@ -1,0 +1,4 @@
+# Relays DHCP de mikrotik3: un per interfície de LAN amb clients
+dhcp_relays:
+  - { name: vcorp-planta03, interface: ether3, local_address: 10.9.3.1 }
+  - { name: vcorp-direccio, interface: ether4, local_address: 10.9.3.129 }
