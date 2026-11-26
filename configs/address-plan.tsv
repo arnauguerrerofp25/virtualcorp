@@ -1,0 +1,23 @@
+# Pla d'adreçament de la delegació 09 (font única per a les reserves DHCP)
+# tipus: fixa (configurada a l'equip, sense DHCP) · reserva (DHCP per MAC) · dinamica (pool)
+nom	segment	ip	mac	tipus	rol
+pve01	privada	10.9.0.133	08:00:27:d5:fd:03	fixa	Node Proxmox VE
+dhcp01	privada	10.9.0.136	bc:24:11:ce:48:e6	fixa	Contenidor Kea DHCP (Terraform)
+dns01	privada	10.9.0.137	-	fixa	Futur servidor DNS (BIND9)
+dbsrv	privada	10.9.0.134	08:00:27:1e:26:e9	reserva	Bases de dades
+infosrv	privada	10.9.0.135	08:00:27:2c:34:9f	reserva	Fitxers i documentació
+websrv	dmz	10.9.0.197	08:00:27:72:ce:b8	reserva	Web pública
+printer0	planta00	10.9.0.65	08:00:27:ff:2b:3f	reserva	Impressió planta baixa
+expo1	planta00	10.9.0.33	08:00:27:03:0f:d6	reserva	Expositor
+expo2	planta00	10.9.0.34	08:00:27:37:fb:a8	reserva	Expositor
+expo3	planta00	10.9.0.35	08:00:27:e6:c1:42	reserva	Expositor
+expo4	planta00	10.9.0.36	08:00:27:64:14:a1	reserva	Expositor
+conserge1	planta00	10.9.0.37	08:00:27:b5:a2:23	reserva	Consergeria
+conserge2	planta00	10.9.0.38	08:00:27:6f:70:3a	reserva	Consergeria
+printer1	planta01	10.9.1.65	08:00:27:80:f1:30	reserva	Impressió planta 1
+printer2	planta02	10.9.2.65	08:00:27:ae:12:a0	reserva	Impressió planta 2
+printer3	planta03	10.9.3.65	08:00:27:1e:13:40	reserva	Impressió planta 3
+pl1-pc01	planta01	-	-	dinamica	Desenvolupament planta 1
+pl2-pc01	planta02	-	-	dinamica	Desenvolupament planta 2
+pl3-pc01	planta03	-	-	dinamica	Departaments planta 3
+dir-pc01	direccio	-	-	dinamica	Direcció
